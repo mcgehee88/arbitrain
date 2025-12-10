@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbitrain - Data-Driven Arbitrage Analysis</title>
+  <meta name="description" content="Stop guessing, start winning. Real eBay sold comps + true all-in costs = your unfair advantage.">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    
+    .container { max-width: 1024px; margin: 0 auto; padding: 1rem; }
+    .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%); min-height: 100vh; color: white; }
+    
+    .demo-banner { background: rgba(234, 179, 8, 0.2); border: 1px solid rgba(234, 179, 8, 0.5); border-radius: 1rem; padding: 1rem; margin: 2rem 0 1.5rem 0; }
+    .demo-banner-title { color: #fcd34d; font-weight: bold; margin-bottom: 0.5rem; }
+    .demo-banner-text { color: #fef3c7; font-size: 0.875rem; margin-bottom: 0.75rem; }
+    
+    .example-btn { background: #d97706; color: #fffbeb; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600; border: none; cursor: pointer; margin-right: 0.5rem; margin-bottom: 0.5rem; transition: all 0.2s; }
+    .example-btn:hover { background: #f59e0b; transform: translateY(-1px); }
+    
+    .header { text-align: center; margin-bottom: 2rem; padding-top: 2rem; }
+    .logo-container { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .logo { width: 3rem; height: 3rem; background: linear-gradient(135deg, #4ade80, #16a34a); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+    .logo svg { width: 1.75rem; height: 1.75rem; }
+    .title { font-size: 2.25rem; font-weight: bold; background: linear-gradient(to right, #4ade80, #60a5fa); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .subtitle { color: #86efac; font-size: 1.125rem; font-weight: 500; }
+    .tagline { color: #cbd5e1; font-size: 0.875rem; margin-top: 0.5rem; }
+    
+    .input-section { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); border: 1px solid #334155; border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .input-label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.75rem; color: #cbd5e1; }
+    .input-row { display: flex; gap: 0.75rem; }
+    .input-wrapper { flex: 1; position: relative; }
+    .input-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+    .input-field { width: 100%; background: #0f172a; border: 1px solid #475569; border-radius: 0.75rem; padding: 1rem 1rem 1rem 3rem; color: white; font-size: 1rem; outline: none; transition: all 0.2s; }
+    .input-field:focus { border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1); }
+    .input-field::placeholder { color: #64748b; }
+    
+    .btn-primary { background: linear-gradient(to right, #22c55e, #16a34a); color: white; font-weight: bold; padding: 1rem 2rem; border-radius: 0.75rem; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .btn-primary:hover:not(:disabled) { background: linear-gradient(to right, #16a34a, #15803d); transform: scale(1.05); }
+    .btn-primary:disabled { background: linear-gradient(to right, #475569, #334155); cursor: not-allowed; transform: none; }
+    
+    .spinner { width: 1.25rem; height: 1.25rem; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .error-box { background: rgba(127, 29, 29, 0.3); border: 1px solid #ef4444; border-radius: 0.75rem; padding: 1rem; margin-bottom: 1.5rem; color: #fca5a5; font-size: 0.875rem; }
+    
+    .hero-card { background: linear-gradient(135deg, #16a34a, #15803d); border: 1px solid #22c55e; border-radius: 1.5rem; padding: 2rem; margin-bottom: 1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+    .hero-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; }
+    .hero-label { font-size: 0.75rem; color: #d1fae5; margin-bottom: 0.25rem; }
+    .hero-amount { font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem; }
+    .hero-desc { color: #d1fae5; }
+    .badge { padding: 0.5rem 1rem; border-radius: 0.75rem; font-weight: bold; font-size: 0.875rem; }
+    .badge-good { background: #22c55e; color: #1a2e05; }
+    .badge-pass { background: #ef4444; color: white; }
+    .badge-great { background: #3b82f6; color: white; }
+    .badge-maybe { background: #eab308; color: #1a2e05; }
+    
+    .lot-badge { background: rgba(21, 128, 61, 0.3); border-radius: 0.75rem; padding: 0.75rem; margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .lot-badge svg { width: 1.25rem; height: 1.25rem; }
+    
+    .hero-stats { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(34, 197, 94, 0.3); display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; }
+    .stat-label { font-size: 0.75rem; color: #d1fae5; margin-bottom: 0.25rem; }
+    .stat-value { font-size: 1.25rem; font-weight: bold; }
+    .stat-positive { color: #6ee7b7; }
+    .stat-negative { color: #fca5a5; }
+    
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .card { background: rgba(30, 41, 59, 0.5); border: 1px solid #334155; border-radius: 0.75rem; padding: 1.25rem; }
+    .card-title { color: #94a3b8; font-size: 0.875rem; margin-bottom: 0.25rem; }
+    .card-amount { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.25rem; }
+    .card-subtitle { color: #64748b; font-size: 0.75rem; }
+    .amount-green { color: #4ade80; }
+    .amount-orange { color: #fb923c; }
+    .amount-blue { color: #60a5fa; }
+    
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .card-header { display: flex; align-items: center; gap: 0.5rem; font-weight: bold; margin-bottom: 1rem; }
+    .card-header svg { width: 1.25rem; height: 1.25rem; }
+    .breakdown-row { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.875rem; }
+    .breakdown-label { color: #94a3b8; }
+    .breakdown-value { font-weight: 600; }
+    .breakdown-divider { border-top: 1px solid #475569; margin: 0.5rem 0; padding-top: 0.5rem; }
+    .breakdown-total { font-size: 1rem; font-weight: bold; }
+    
+    .exit-platform { font-weight: bold; color: #4ade80; font-size: 1rem; }
+    .exit-breakdown { background: rgba(15, 23, 42, 0.5); border-radius: 0.5rem; padding: 0.75rem; margin-top: 0.75rem; }
+    .exit-row { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.25rem; }
+    .exit-label { color: #94a3b8; }
+    .exit-value { font-weight: 600; }
+    .exit-negative { color: #fca5a5; }
+    .exit-positive { color: #4ade80; }
+    
+    .comps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem; }
+    .comp-stat { }
+    .comp-label { font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.25rem; }
+    .comp-value { font-size: 1.5rem; font-weight: bold; }
+    .query-box { background: rgba(15, 23, 42, 0.5); border-radius: 0.5rem; padding: 0.75rem; margin-top: 1rem; }
+    .query-label { font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.25rem; }
+    .query-text { font-family: monospace; font-size: 0.875rem; color: #93c5fd; }
+    .confidence-badge { font-size: 0.75rem; font-weight: 600; margin-top: 0.75rem; color: #4ade80; }
+    
+    .footer { text-align: center; margin-top: 3rem; padding-bottom: 2rem; }
+    .footer-title { font-weight: 600; color: #cbd5e1; font-size: 0.875rem; }
+    .footer-subtitle { font-size: 0.75rem; color: #64748b; margin-top: 0.5rem; }
+    .footer-demo { font-size: 0.75rem; color: #fbbf24; margin-top: 0.5rem; }
+    
+    .popup-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; animation: fadeIn 0.3s; }
+    .popup-content { background: #1e293b; border: 2px solid #22c55e; border-radius: 1.5rem; padding: 2rem; max-width: 28rem; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; animation: slideUp 0.3s; }
+    .popup-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #94a3b8; font-size: 2rem; cursor: pointer; line-height: 1; }
+    .popup-close:hover { color: white; }
+    .popup-icon { width: 4rem; height: 4rem; background: linear-gradient(135deg, #4ade80, #16a34a); border-radius: 1.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+    .popup-title { font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 0.75rem; }
+    .popup-text { color: #cbd5e1; font-size: 0.875rem; text-align: center; margin-bottom: 1.5rem; }
+    .popup-btn { display: block; width: 100%; background: linear-gradient(to right, #22c55e, #16a34a); color: white; font-weight: bold; padding: 1rem 1.5rem; border-radius: 0.75rem; text-align: center; text-decoration: none; transition: all 0.2s; }
+    .popup-btn:hover { background: linear-gradient(to right, #16a34a, #15803d); transform: scale(1.05); }
+    .popup-dismiss { margin-top: 1rem; background: none; border: none; color: #94a3b8; font-size: 0.875rem; cursor: pointer; width: 100%; }
+    .popup-dismiss:hover { color: #cbd5e1; }
+    
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .check-icon { display: inline-block; width: 0.75rem; height: 0.75rem; margin-left: 0.25rem; color: #4ade80; }
+    
+    @media (max-width: 768px) {
+      .container { padding: 0.5rem; }
+      .input-row { flex-direction: column; }
+      .btn-primary { width: 100%; justify-content: center; }
+      
+      .hero-card { padding: 1.5rem; }
+      .hero-amount { font-size: 2.5rem; }
+      .hero-header { flex-direction: column; gap: 1rem; }
+      .badge { align-self: flex-start; }
+      .hero-stats { grid-template-columns: 1fr; gap: 0.75rem; text-align: left; }
+      
+      .grid-3, .grid-2, .comps-grid { grid-template-columns: 1fr; }
+      
+      .title { font-size: 2rem; }
+      .logo { width: 2.5rem; height: 2.5rem; }
+      .logo svg { width: 1.5rem; height: 1.5rem; }
+      
+      .demo-banner { padding: 0.75rem; margin-top: 1rem; }
+      .example-btn { width: 100%; margin-right: 0; }
+      
+      .popup-content { padding: 1.5rem; margin: 1rem; }
+      .popup-title { font-size: 1.25rem; }
+      
+      .input-field { font-size: 16px; } /* Prevents zoom on iOS */
+      .input-section { padding: 1rem; }
+      
+      .card { padding: 1rem; }
+      .card-amount { font-size: 1.75rem; }
+      
+      .breakdown-row { font-size: 0.8125rem; flex-wrap: wrap; }
+      .breakdown-label { flex: 1; min-width: 60%; }
+    }
+    
+    @media (max-width: 480px) {
+      .hero-amount { font-size: 2rem; }
+      .stat-value { font-size: 1.125rem; }
+      .card-amount { font-size: 1.5rem; }
+      .comp-value { font-size: 1.25rem; }
+    }
+    
+    /* Touch-friendly improvements */
+    button, a, input { -webkit-tap-highlight-color: rgba(34, 197, 94, 0.3); }
+    .btn-primary, .example-btn, .popup-btn { min-height: 44px; } /* Apple's recommended touch target */
+    
+    /* Prevent text size adjustment on orientation change */
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    
+    /* Smooth scrolling for better mobile UX */
+    html { scroll-behavior: smooth; }
+    
+    /* Better mobile form inputs */
+    input { font-size: 16px; } /* Prevents auto-zoom on iOS */
+  </style>
+</head>
+<body>
+  <div class="gradient-bg">
+    <div class="container">
+      <div id="popup" style="display: none;"></div>
+      <div id="app"></div>
+    </div>
+  </div>
+  
+  <script>
+    // Icon SVGs
+    const icons = {
+      search: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
+      trending: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+      target: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+      info: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+      package: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+      check: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+      dollar: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      external: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
+    };
+    
+    // Demo data
+    const demoData = {
+      sewing: {
+        scraped: { site: 'CTBids', title: 'Janome Memory Craft 6500P Computerized Sewing Machine', price: 125 },
+        lot: { isLot: false, count: 1 },
+        query: 'Janome Memory Craft 6500P',
+        comps: { n: 42, min: 180, max: 420, median: 310 },
+        costs: { buy: 125, buyerPremium: 19, buyerPremiumRate: '15%', salesTax: 9, salesTaxRate: '6%', shipIn: 15, handling: 0, allIn: 168, dataSource: { buyerPremium: 'extracted', salesTax: 'extracted', shipping: 'extracted' }},
+        economics: { estResale: 310, bestExit: 'eBay', exitFees: 40, exitShipping: 12, net: 258, mult: 1.54, maxStrike: 147 },
+        badge: 'GOOD'
+      },
+      guitar: {
+        scraped: { site: 'CTBids', title: 'Fender Stratocaster MIM 2018 Sunburst', price: 350 },
+        lot: { isLot: false, count: 1 },
+        query: 'Fender Stratocaster MIM',
+        comps: { n: 67, min: 450, max: 750, median: 580 },
+        costs: { buy: 350, buyerPremium: 53, buyerPremiumRate: '15%', salesTax: 24, salesTaxRate: '6%', shipIn: 25, handling: 0, allIn: 452, dataSource: { buyerPremium: 'extracted', salesTax: 'estimated', shipping: 'extracted' }},
+        economics: { estResale: 580, bestExit: 'Reverb', exitFees: 49, exitShipping: 25, net: 506, mult: 1.12, maxStrike: 312 },
+        badge: 'PASS'
+      },
+      vinyl: {
+        scraped: { site: 'ShopGoodwill', title: 'Vintage Vinyl Record Lot - Classic Rock - 15 LPs', price: 28 },
+        lot: { isLot: true, count: 15 },
+        query: 'vintage vinyl LP classic rock',
+        comps: { n: 89, min: 3, max: 25, median: 12 },
+        costs: { buy: 28, buyerPremium: 0, buyerPremiumRate: '0%', salesTax: 2, salesTaxRate: '7%', shipIn: 15, handling: 8, allIn: 53, dataSource: { buyerPremium: 'estimated', salesTax: 'extracted', shipping: 'extracted' }},
+        economics: { estResale: 180, bestExit: 'eBay', exitFees: 23, exitShipping: 82, net: 75, mult: 1.42, maxStrike: 24 },
+        badge: 'GOOD'
+      }
+    };
+    
+    let state = { url: '', loading: false, result: null, error: null };
+    
+    function analyze(url) {
+      state.loading = true;
+      state.error = null;
+      state.result = null;
+      render();
+      
+      setTimeout(() => {
+        const u = url.toLowerCase();
+        if (u.includes('sewing') || u.includes('janome')) state.result = demoData.sewing;
+        else if (u.includes('guitar') || u.includes('fender')) state.result = demoData.guitar;
+        else if (u.includes('vinyl') || u.includes('record')) state.result = demoData.vinyl;
+        else state.error = 'Try one of the example URLs above!';
+        
+        state.loading = false;
+        render();
+      }, 1500);
+    }
+    
+    function loadExample(type) {
+      const urls = {
+        sewing: 'https://ctbids.com/sewing-machine-janome-6500',
+        guitar: 'https://ctbids.com/fender-stratocaster-guitar',
+        vinyl: 'https://shopgoodwill.com/vinyl-records-lot-15'
+      };
+      state.url = urls[type];
+      state.result = null;
+      state.error = null;
+      render();
+    }
+    
+    function render() {
+      const r = state.result;
+      const badgeClass = r ? `badge badge-${r.badge.toLowerCase()}` : '';
+      
+      document.getElementById('app').innerHTML = `
+        <div class="demo-banner">
+          <div style="display: flex; align-items: start; gap: 0.75rem;">
+            ${icons.info}
+            <div>
+              <div class="demo-banner-title">🎭 Interactive Demo</div>
+              <div class="demo-banner-text">Try these examples:</div>
+              <div>
+                <button class="example-btn" onclick="loadExample('sewing')">📍 Sewing Machine</button>
+                <button class="example-btn" onclick="loadExample('guitar')">🎸 Guitar</button>
+                <button class="example-btn" onclick="loadExample('vinyl')">💿 Vinyl Lot</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="header">
+          <div class="logo-container">
+            <div class="logo">${icons.trending}</div>
+            <h1 class="title">Arbitrain</h1>
+          </div>
+          <p class="subtitle">Stop guessing. Start winning.</p>
+          <p class="tagline">Real sold comps + true all-in costs = your unfair advantage</p>
+        </div>
+        
+        <div class="input-section">
+          <label class="input-label">Paste any listing URL</label>
+          <div class="input-row">
+            <div class="input-wrapper">
+              <div class="input-icon">${icons.search}</div>
+              <input type="text" class="input-field" placeholder="https://ctbids.com/..." value="${state.url}" oninput="state.url=this.value">
+            </div>
+            <button class="btn-primary" onclick="analyze(state.url)" ${state.loading ? 'disabled' : ''}>
+              ${state.loading ? '<div class="spinner"></div>Analyzing...' : `${icons.target}Analyze`}
+            </button>
+          </div>
+        </div>
+        
+        ${state.error ? `<div class="error-box">${state.error}</div>` : ''}
+        
+        ${r ? `
+          <div class="hero-card">
+            <div class="hero-header">
+              <div>
+                <div class="hero-label">MAXIMUM SAFE BID</div>
+                <div class="hero-amount">$${r.economics.maxStrike}</div>
+                <div class="hero-desc">Bid higher and you won't hit your 1.5× ROI target</div>
+              </div>
+              <div class="${badgeClass}">${r.badge}</div>
+            </div>
+            ${r.lot.isLot ? `
+              <div class="lot-badge">
+                ${icons.package}
+                <span><strong>LOT:</strong> ${r.lot.count} items</span>
+              </div>
+            ` : ''}
+            <div class="hero-stats">
+              <div><div class="stat-label">Current</div><div class="stat-value">$${r.costs.buy}</div></div>
+              <div><div class="stat-label">Your Max</div><div class="stat-value stat-positive">$${r.economics.maxStrike}</div></div>
+              <div><div class="stat-label">Room</div><div class="stat-value">${r.economics.maxStrike > r.costs.buy ? `<span class="stat-positive">+$${(r.economics.maxStrike - r.costs.buy).toFixed(2)}</span>` : '<span class="stat-negative">PASS</span>'}</div></div>
+            </div>
+          </div>
+          
+          <div class="grid-3">
+            <div class="card">
+              <div class="card-title">Est. Resale</div>
+              <div class="card-amount amount-green">${r.economics.estResale}</div>
+              <div class="card-subtitle">${r.comps.n} sold comps</div>
+            </div>
+            <div class="card">
+              <div class="card-title">All-In Cost</div>
+              <div class="card-amount amount-orange">$${r.costs.allIn}</div>
+              <div class="card-subtitle">Bid + fees + tax</div>
+            </div>
+            <div class="card">
+              <div class="card-title">Net Profit</div>
+              <div class="card-amount amount-blue">$${r.economics.net}</div>
+              <div class="card-subtitle">${r.economics.mult}× ROI</div>
+            </div>
+          </div>
+          
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">${icons.dollar} Cost Breakdown</div>
+              <div class="breakdown-row"><span class="breakdown-label">Hammer (bid)</span><span class="breakdown-value">$${r.costs.buy}</span></div>
+              ${r.costs.buyerPremium > 0 ? `
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Premium (${r.costs.buyerPremiumRate}) ${r.costs.dataSource.buyerPremium === 'extracted' ? '<span class="check-icon">'+icons.check+'</span>' : ''}</span>
+                  <span class="breakdown-value">$${r.costs.buyerPremium}</span>
+                </div>
+              ` : ''}
+              ${r.costs.salesTax > 0 ? `
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Tax (${r.costs.salesTaxRate}) ${r.costs.dataSource.salesTax === 'extracted' ? '<span class="check-icon">'+icons.check+'</span>' : ''}</span>
+                  <span class="breakdown-value">$${r.costs.salesTax}</span>
+                </div>
+              ` : ''}
+              ${r.costs.shipIn > 0 ? `
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Inbound ${r.costs.dataSource.shipping === 'extracted' ? '<span class="check-icon">'+icons.check+'</span>' : ''}</span>
+                  <span class="breakdown-value">$${r.costs.shipIn}</span>
+                </div>
+              ` : ''}
+              ${r.costs.handling > 0 ? `
+                <div class="breakdown-row">
+                  <span class="breakdown-label">Handling</span>
+                  <span class="breakdown-value">$${r.costs.handling}</span>
+                </div>
+              ` : ''}
+              <div class="breakdown-row breakdown-divider breakdown-total"><span>Total All-In</span><span style="color: #fb923c;">$${r.costs.allIn}</span></div>
+            </div>
+            
+            <div class="card">
+              <div class="card-header">${icons.trending} Exit Strategy</div>
+              <div class="breakdown-row"><span class="breakdown-label">Best platform</span><span class="exit-platform">${r.economics.bestExit}</span></div>
+              <div class="exit-breakdown">
+                <div class="exit-row"><span class="exit-label">Resale</span><span class="exit-value">$${r.economics.estResale}</span></div>
+                <div class="exit-row"><span class="exit-label">Fees</span><span class="exit-value exit-negative">-${r.economics.exitFees}</span></div>
+                <div class="exit-row"><span class="exit-label">Shipping</span><span class="exit-value exit-negative">-${r.economics.exitShipping}</span></div>
+                <div class="exit-row" style="border-top: 1px solid #334155; margin-top: 0.5rem; padding-top: 0.5rem;"><span class="exit-label" style="font-weight: 600;">Net</span><span class="exit-value exit-positive" style="font-weight: bold;">${r.economics.net}</span></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">${icons.external} eBay Sold Comps</div>
+            <div class="comps-grid">
+              <div class="comp-stat"><div class="comp-label">Found</div><div class="comp-value">${r.comps.n}</div></div>
+              <div class="comp-stat"><div class="comp-label">Median</div><div class="comp-value amount-green">${r.comps.median}</div></div>
+              <div class="comp-stat"><div class="comp-label">Low</div><div class="comp-value">${r.comps.min}</div></div>
+              <div class="comp-stat"><div class="comp-label">High</div><div class="comp-value">${r.comps.max}</div></div>
+            </div>
+            <div class="query-box">
+              <div class="query-label">Query:</div>
+              <div class="query-text">${r.query}</div>
+            </div>
+            <div class="confidence-badge">🟢 High confidence - Excellent data</div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">Source Listing</div>
+            <div class="breakdown-row"><span class="breakdown-label">Site:</span><span class="breakdown-value">${r.scraped.site}</span></div>
+            <div class="breakdown-row"><span class="breakdown-label">Title:</span><span class="breakdown-value">${r.scraped.title}</span></div>
+            <div class="breakdown-row"><span class="breakdown-label">Price:</span><span class="breakdown-value">${r.scraped.price}</span></div>
+          </div>
+        ` : ''}
+        
+        <div class="footer">
+          <p class="footer-title">Arbitrain - Data-Driven Arbitrage</p>
+          <p class="footer-subtitle">Real sold comps • Dynamic fees • Smart exit selection</p>
+          <p class="footer-demo">🎭 Demo mode - Backend integration ready</p>
+        </div>
+      `;
+    }
+    
+    // Popup
+    setTimeout(() => {
+      document.getElementById('popup').innerHTML = `
+        <div class="popup-overlay" id="popupOverlay">
+          <div class="popup-content">
+            <button class="popup-close" onclick="document.getElementById('popupOverlay').style.display='none'">×</button>
+            <div class="popup-icon">${icons.trending}</div>
+            <h3 class="popup-title">Want Early Access?</h3>
+            <p class="popup-text">Get notified when Arbitrain BETA goes live. Be among the first to gain the unfair advantage.</p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSckbORt8px2uu620lsXPiMiGw24J02wS7OKngg_9jlbxOyE5w/viewform?usp=sharing&ouid=110081427308562976680" target="_blank" rel="noopener noreferrer" class="popup-btn">Get Early Access</a>
+            <button class="popup-dismiss" onclick="document.getElementById('popupOverlay').style.display='none'">Maybe later</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('popupOverlay').style.display = 'flex';
+    }, 5000);
+    
+    render();
+  </script>
+</body>
+</html>
