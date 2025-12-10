@@ -182,7 +182,6 @@
 <body>
   <div class="gradient-bg">
     <div class="container">
-      <div id="popup" style="display: none;"></div>
       <div id="app"></div>
     </div>
   </div>
@@ -423,21 +422,22 @@
     }
     
     // Popup
-    setTimeout(() => {
-      document.getElementById('popup').innerHTML = `
-        <div class="popup-overlay" id="popupOverlay">
-          <div class="popup-content">
-            <button class="popup-close" onclick="document.getElementById('popupOverlay').style.display='none'">×</button>
-            <div class="popup-icon">${icons.trending}</div>
-            <h3 class="popup-title">Want Early Access?</h3>
-            <p class="popup-text">Get notified when Arbitrain BETA goes live. Be among the first to gain the unfair advantage.</p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSckbORt8px2uu620lsXPiMiGw24J02wS7OKngg_9jlbxOyE5w/viewform?usp=sharing&ouid=110081427308562976680" target="_blank" rel="noopener noreferrer" class="popup-btn">Get Early Access</a>
-            <button class="popup-dismiss" onclick="document.getElementById('popupOverlay').style.display='none'">Maybe later</button>
-          </div>
-        </div>
-      `;
-      document.getElementById('popupOverlay').style.display = 'flex';
-    }, 5000);
+setTimeout(() => {
+  const popup = document.createElement('div');
+  popup.innerHTML = `
+    <div class="popup-overlay" id="popupOverlay">
+      <div class="popup-content">
+        <button class="popup-close" onclick="document.getElementById('popupOverlay').remove()">×</button>
+        <div class="popup-icon">${icons.trending}</div>
+        <h3 class="popup-title">Want Early Access?</h3>
+        <p class="popup-text">Get notified when Arbitrain BETA goes live. Be among the first to gain the unfair advantage.</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSckbORt8px2uu620lsXPiMiGw24J02wS7OKngg_9jlbxOyE5w/viewform?usp=sharing&ouid=110081427308562976680" target="_blank" rel="noopener noreferrer" class="popup-btn">Get Early Access</a>
+        <button class="popup-dismiss" onclick="document.getElementById('popupOverlay').remove()">Maybe later</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup.firstElementChild);
+}, 5000);
     
     render();
   </script>
