@@ -101,10 +101,10 @@ async function runTests() {
 
       const analysis = calculator.analyze(
         itemProfile,
-        comps,
-        listing,
         queryLadder[0],
-        queryLadder
+        queryLadder,
+        comps,
+        listing
       );
 
       result.analysis = analysis;
@@ -441,5 +441,6 @@ function generateHTMLReport(results: TestResult[]) {
 }
 
 runTests().catch(console.error);
+
 
 
