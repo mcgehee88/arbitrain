@@ -6,7 +6,7 @@ import { ItemExtractor } from '../packages/adapters/src/item.extractor';
 import { EBayClient } from '../packages/adapters/src/ebay.client';
 import { CalculationEngine } from '../packages/shared/src/calculator';
 
-dotenv.config({ path: path.resolve(__dirname, '../../../secrets/.env.ebay') });
+dotenv.config({ path: '/home/workspace/Arbitrain.com/secrets/.env.ebay' });
 
 const REAL_URLS = [
   'https://www.ebay.com/itm/185810487116',
@@ -274,6 +274,7 @@ function generateHTMLReport(results: TestResult[]) {
 }
 
 runTests().catch(console.error);
+
 
 
 
