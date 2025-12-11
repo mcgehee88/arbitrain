@@ -224,17 +224,17 @@ function generateHTMLReport(results: TestResult[]) {
         <div class="result-metrics">
           <div class="metric">
             <label>Median Price</label>
-            <div class="value">$${r.analysis.median_price.toFixed(2)}</div>
+            <div class="value">$${r.analysis.median_price?.toFixed(2) || 'N/A'}</div>
           </div>
           <div class="metric">
             <label>Price Range</label>
             <div class="value" style="font-size: 0.9em;">
-              $${r.analysis.price_range.low.toFixed(0)}<br>–<br>$${r.analysis.price_range.high.toFixed(0)}
+              $${r.analysis.price_range?.low?.toFixed(0) || 'N/A'}<br>–<br>$${r.analysis.price_range?.high?.toFixed(0) || 'N/A'}
             </div>
           </div>
           <div class="metric">
             <label>Max Safe Bid</label>
-            <div class="value">$${r.analysis.max_safe_bid.toFixed(2)}</div>
+            <div class="value">$${r.analysis.max_safe_bid?.toFixed(2) || 'N/A'}</div>
           </div>
           <div class="metric">
             <label>Confidence</label>
@@ -245,24 +245,24 @@ function generateHTMLReport(results: TestResult[]) {
                   ? 'medium'
                   : 'low'
             }">
-              ${r.analysis.confidence_label.toUpperCase()}<br><span style="font-size: 0.7em;">${r.analysis.confidence_score.toFixed(0)}/100</span>
+              ${(r.analysis.confidence_label || 'UNKNOWN').toUpperCase()}<br><span style="font-size: 0.7em;">${r.analysis.confidence_score?.toFixed(0) || '?'}/100</span>
             </div>
           </div>
         </div>
 
         <div style="margin-top: 20px;">
-          <p><strong>📊 Summary:</strong> ${r.analysis.explanation.summary}</p>
-          <p><strong>💡 Reasoning:</strong> ${r.analysis.explanation.resale_reasoning}</p>
-          <p><strong>📈 Max Bid Logic:</strong> ${r.analysis.explanation.max_bid_reasoning}</p>
+          <p><strong>📊 Summary:</strong> ${r.analysis.explanation?.summary || 'No summary'}</p>
+          <p><strong>💡 Reasoning:</strong> ${r.analysis.explanation?.resale_reasoning || 'No reasoning'}</p>
+          <p><strong>📈 Max Bid Logic:</strong> ${r.analysis.explanation?.max_bid_reasoning || 'No explanation'}</p>
         </div>
 
         ${
-          r.analysis.explanation.warnings && r.analysis.explanation.warnings.length > 0
+          r.analysis.explanation?.warnings && r.analysis.explanation.warnings.length > 0
             ? `
           <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-top: 15px; border-radius: 4px;">
             <strong style="color: #856404;">⚠️ Warnings:</strong>
             <ul style="margin: 10px 0 0 20px;">
-              ${r.analysis.explanation.warnings.map((w) => `<li style="color: #856404;">${w}</li>`).join('')}
+              ${r.analysis.explanation.warnings.map((w: string) => `<li style="color: #856404;">${w}</li>`).join('')}
             </ul>
           </div>
         `
@@ -270,12 +270,12 @@ function generateHTMLReport(results: TestResult[]) {
         }
 
         ${
-          r.analysis.explanation.opportunities && r.analysis.explanation.opportunities.length > 0
+          r.analysis.explanation?.opportunities && r.analysis.explanation.opportunities.length > 0
             ? `
           <div style="background: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin-top: 15px; border-radius: 4px;">
             <strong style="color: #155724;">✅ Opportunities:</strong>
             <ul style="margin: 10px 0 0 20px;">
-              ${r.analysis.explanation.opportunities.map((o) => `<li style="color: #155724;">${o}</li>`).join('')}
+              ${r.analysis.explanation.opportunities.map((o: string) => `<li style="color: #155724;">${o}</li>`).join('')}
             </ul>
           </div>
         `
@@ -441,4 +441,5 @@ function generateHTMLReport(results: TestResult[]) {
 }
 
 runTests().catch(console.error);
+
 

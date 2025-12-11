@@ -116,10 +116,18 @@ export class CalculationEngine {
       prices.reduce((a, p) => a + Math.pow(p - mean, 2), 0) / prices.length;
     const stdDev = Math.sqrt(variance);
 
-    return comps.filter((c) => {
+    // Use 2.5 std devs instead of 2, and keep at least 3 comps
+    const filtered = comps.filter((c) => {
       const zscore = Math.abs((c.sold_price - mean) / stdDev);
-      return zscore < 2;
+      return zscore < 2.5;
     });
+
+    // If we filtered too aggressively, return at least the median priced ones
+    if (filtered.length < 3) {
+      return comps.sort((a, b) => a.sold_price - b.sold_price).slice(Math.floor(comps.length * 0.2), Math.ceil(comps.length * 0.8));
+    }
+
+    return filtered;
   }
 
   private calculateMedian(prices: number[]): number {
@@ -236,4 +244,5 @@ export class CalculationEngine {
     return opps;
   }
 }
+
 
