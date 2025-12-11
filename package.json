@@ -15,11 +15,16 @@
     "type": "git",
     "url": "git+https://github.com/mcgehee88/arbitrain.git"
   },
-  "workspaces": [
-    "apps/web",
-    "apps/api",
-    "packages/shared",
-    "packages/adapters",
-    "packages/config"
-  ]
+  "devDependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.2",
+    "@types/node": "^22.7.7"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5"
+  }
 }
+

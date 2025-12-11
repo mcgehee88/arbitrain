@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbitrain Phase 2 - eBay Comp Testing</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f5; 
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { 
+      background: white; 
+      padding: 30px; 
+      border-radius: 8px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 { color: #222; font-size: 28px; margin-bottom: 10px; }
+    .meta { color: #666; font-size: 14px; }
+    .test-case {
+      background: white;
+      padding: 30px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .test-title { 
+      font-size: 20px; 
+      color: #222; 
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .test-desc { 
+      color: #666; 
+      font-size: 14px; 
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .item-profile {
+      background: #f9f9f9;
+      padding: 15px;
+      border-left: 4px solid #0066cc;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .item-profile strong { color: #222; }
+    .queries-section {
+      margin: 20px 0;
+    }
+    .queries-section h3 { 
+      color: #222; 
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .query-ladder {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #333;
+      line-height: 1.8;
+    }
+    .results-section {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    .results-section h3 { 
+      color: #222; 
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .result-item { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .result-label { 
+      font-weight: 600; 
+      color: #666; 
+    }
+    .result-value { 
+      color: #222; 
+    }
+    .confidence-high { color: #28a745; font-weight: 600; }
+    .confidence-medium { color: #ffc107; font-weight: 600; }
+    .confidence-low { color: #dc3545; font-weight: 600; }
+    .confidence-no-data { color: #999; font-weight: 600; }
+    .comps-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .comps-table th {
+      background: #e9ecef;
+      padding: 8px;
+      text-align: left;
+      font-weight: 600;
+      color: #222;
+      border: 1px solid #ddd;
+    }
+    .comps-table td {
+      padding: 8px;
+      border: 1px solid #ddd;
+      color: #333;
+    }
+    .comps-table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    .warning { 
+      background: #fff3cd; 
+      padding: 10px; 
+      border-left: 4px solid #ffc107;
+      margin-top: 10px;
+      border-radius: 4px;
+      color: #856404;
+      font-size: 12px;
+    }
+    .footer {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      color: #666;
+      font-size: 12px;
+      margin-top: 30px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔍 Arbitrain Phase 2 - eBay Comp Testing Report</h1>
+      <div class="meta">Generated: 12/11/2025, 1:57:35 PM</div>
+      <div class="meta">Environment: Production eBay API</div>
+    </header>
+
+    
+    <div class="test-case">
+      <div class="test-title">Test 1: iPhone 14 - High Specificity</div>
+      <div class="test-desc">Latest flagship phone, specific model, storage, condition clearly stated</div>
+      
+      <div class="item-profile">
+        <strong>Listing Title:</strong> Apple iPhone 14 Pro Max 256GB Unlocked - Mint Condition
+      </div>
+
+      <div class="queries-section">
+        <h3>📍 Query Ladder (Fallback Chain)</h3>
+        <div class="query-ladder">
+          1. "Apple iPhone 14 Pro Max 256GB unlocked"<br>2. "iPhone 14 Pro Max 256GB"<br>3. "Apple iPhone 14 Pro Max"<br>4. "iPhone 14 Pro"<br>5. "iPhone 14"
+        </div>
+      </div>
+
+      <div class="results-section">
+        <h3>📊 Comp Matching Results</h3>
+        <div class="result-item">
+          <div class="result-label">Query Used (Ladder Level):</div>
+          <div class="result-value">Apple iPhone 14 Pro Max 256GB unlocked (Level 1)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Total Comps Found:</div>
+          <div class="result-value">50</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Median Sale Price:</div>
+          <div class="result-value">$499.99</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Price Range:</div>
+          <div class="result-value">$150.00 - $1250.00</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Confidence Score:</div>
+          <div class="result-value confidence-high">HIGH</div>
+        </div>
+
+        
+        <h4 style="margin-top: 20px; font-size: 13px; color: #222;">Top Comps (Last 30 Days)</h4>
+        <table class="comps-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Condition</th>
+              <th>Sold Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/326909485447?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item4c1d52e187:g:z18AAeSwSqVpOwy-" target="_blank">Apple iPhone 14 Pro max 256gb TMobile network unlocked...</a></td>
+              <td>$449.00</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/187834003186?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item2bbbc76ef2:g:HM8AAeSwkMZpFyFC" target="_blank">APPLE IPHONE 14 PRO MAX UNLOCKED 256GB PURPLE WORKS GREAT...</a></td>
+              <td>$535.00</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/197941615306?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item2e163d5aca:g:ZNsAAeSwr-VpOwUb" target="_blank">Factory Unlocked Apple iPhone 14 Pro Max 256GB Deep purple...</a></td>
+              <td>$499.99</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/376770883752?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item57b94b70a8:g:KA4AAeSwkR5pOtwK" target="_blank">Apple iPhone 14 Pro Max (100% Batt) 256GB Factory Unlocked W...</a></td>
+              <td>$549.99</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/366053282183?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item553a79d187:g:B3IAAeSwDXRpOvxd" target="_blank">Apple iPhone 14 Pro Max 256GB Gold Factory Unlocked Smartpho...</a></td>
+              <td>$589.00</td>
+              <td>Open box</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/257254913880?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item3be5967758:g:UmoAAeSwpYZpOu27" target="_blank">iPhone 14 Pro Max 256gb (new Apple Express replacement) stil...</a></td>
+              <td>$630.00</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/227127468049?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item34e1da2011:g:qdEAAeSwPpJpORHy" target="_blank">Apple iPhone 14 Pro Max 256GB - Factory Unlocked - Purple Wi...</a></td>
+              <td>$422.99</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/267508522984?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item3e48c01fe8:g:RVwAAeSwlfxpOuv6" target="_blank">Apple iPhone 14 Pro Max (256 GB) Unlocked  - Deep Purple...</a></td>
+              <td>$599.99</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/157537802192?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item24adfc17d0:g:eEEAAeSwwLBpOuPq" target="_blank">Apple iPhone 14 Pro 256GB, Unlocked, Deep Purple...</a></td>
+              <td>$450.00</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/287003792566?_skw=Apple+iPhone+14+Pro+Max+256GB+unlocked&hash=item42d2c254b6:g:yHQAAeSwVq9pOJmK" target="_blank">iPhone 14 Pro Max 256gb Unlocked Battery 78% WORKS GREAT REA...</a></td>
+              <td>$359.99</td>
+              <td>For parts or not working</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+      </div>
+
+      
+    </div>
+    
+    <div class="test-case">
+      <div class="test-title">Test 2: Vintage Camera - Low Specificity</div>
+      <div class="test-desc">Only know: old camera, no brand, no model, condition vague. Tests fallback logic.</div>
+      
+      <div class="item-profile">
+        <strong>Listing Title:</strong> Vintage Film Camera - condition unknown, no model number
+      </div>
+
+      <div class="queries-section">
+        <h3>📍 Query Ladder (Fallback Chain)</h3>
+        <div class="query-ladder">
+          1. "vintage film camera"<br>2. "old camera"<br>3. "antique camera"<br>4. "film camera"<br>5. "camera vintage"
+        </div>
+      </div>
+
+      <div class="results-section">
+        <h3>📊 Comp Matching Results</h3>
+        <div class="result-item">
+          <div class="result-label">Query Used (Ladder Level):</div>
+          <div class="result-value">vintage film camera (Level 1)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Total Comps Found:</div>
+          <div class="result-value">50</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Median Sale Price:</div>
+          <div class="result-value">$30.00</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Price Range:</div>
+          <div class="result-value">$9.84 - $275.00</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Confidence Score:</div>
+          <div class="result-value confidence-high">HIGH</div>
+        </div>
+
+        
+        <h4 style="margin-top: 20px; font-size: 13px; color: #222;">Top Comps (Last 30 Days)</h4>
+        <table class="comps-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Condition</th>
+              <th>Sold Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/376771010517?_skw=vintage+film+camera&hash=item57b94d5fd5:g:qngAAeSws9tpOxCO" target="_blank">hasselblad CF C/250 Vintage Camera Lens...</a></td>
+              <td>$30.00</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/177667308328?_skw=vintage+film+camera&hash=item295dcbfb28:g:l4wAAeSw-ctpOw3v" target="_blank">Argus Cinetronic M3 8mm Movie Camera Vintage 1950s with Case...</a></td>
+              <td>$97.76</td>
+              <td>undefined</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/257255068436?_skw=vintage+film+camera&hash=item3be598d314:g:9dcAAeSw7MFpOwub" target="_blank">Vintage Zenit 19 35mm SLR Film Camera with Zenitar-M 50mm f/...</a></td>
+              <td>$145.99</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/127557189831?_skw=vintage+film+camera&hash=item1db30040c7:g:0pkAAeSwNI1pOwtT" target="_blank">Vintage Kodak Tele-Instamatic 608 Black 110 Film Camera 1970...</a></td>
+              <td>$22.00</td>
+              <td>undefined</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/376770997890?_skw=vintage+film+camera&hash=item57b94d2e82:g:6poAAeSwPMtpOw3Z" target="_blank">Vintage MINOLTA XG7 35mm Film SLR Camera W/1:1.7 f=50mm Lens...</a></td>
+              <td>$150.00</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/147024998592?_skw=vintage+film+camera&hash=item223b5f70c0:g:MlAAAeSwhftpOPyA" target="_blank">UNTESTED Honeywell Pentax Spotmatic F Film Camera Vintage wi...</a></td>
+              <td>$90.00</td>
+              <td>For parts or not working</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/376770986722?_skw=vintage+film+camera&hash=item57b94d02e2:g:lAAAAeSw~Ydn~B5Q" target="_blank">Vintage 1950s  Bell & Howell 333 8MM Movie Camera With Case ...</a></td>
+              <td>$46.50</td>
+              <td>undefined</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/358007928928?_skw=vintage+film+camera&hash=item535aef7860:g:PXUAAOSwdQNoHKSB" target="_blank">Minolta SRT 100 35mm Film Camera MC Rokkor-PF 55mm f/1.9 Len...</a></td>
+              <td>$50.15</td>
+              <td>undefined</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/205914842286?_skw=vintage+film+camera&hash=item2ff17b24ae:g:izkAAeSw-ctpOwve" target="_blank">Authentic Vintage Canon Sure Shot 60 35mm Point & Shoot Film...</a></td>
+              <td>$27.99</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/127557174430?_skw=vintage+film+camera&hash=item1db300049e:g:IOMAAeSweRNpOwt-" target="_blank">Vintage Canon AE-1 35mm Film Camera, with 50mm F1.8 FD Lens,...</a></td>
+              <td>$275.00</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+      </div>
+
+      
+    </div>
+    
+    <div class="test-case">
+      <div class="test-title">Test 3: Gold Jewelry Lot - Bundle</div>
+      <div class="test-desc">Multiple items bundled. Tests lot detection and unit price normalization.</div>
+      
+      <div class="item-profile">
+        <strong>Listing Title:</strong> Lot: Gold Jewelry - Rings, Earrings, Necklace (5 pieces)
+      </div>
+
+      <div class="queries-section">
+        <h3>📍 Query Ladder (Fallback Chain)</h3>
+        <div class="query-ladder">
+          1. "gold jewelry lot rings earrings necklace"<br>2. "gold jewelry bundle"<br>3. "vintage gold jewelry"<br>4. "gold ring earring necklace"<br>5. "gold jewelry"
+        </div>
+      </div>
+
+      <div class="results-section">
+        <h3>📊 Comp Matching Results</h3>
+        <div class="result-item">
+          <div class="result-label">Query Used (Ladder Level):</div>
+          <div class="result-value">gold jewelry lot rings earrings necklace (Level 1)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Total Comps Found:</div>
+          <div class="result-value">50</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Median Sale Price:</div>
+          <div class="result-value">$50.00</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Price Range:</div>
+          <div class="result-value">$11.99 - $4250.00</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Confidence Score:</div>
+          <div class="result-value confidence-high">HIGH</div>
+        </div>
+
+        
+        <h4 style="margin-top: 20px; font-size: 13px; color: #222;">Top Comps (Last 30 Days)</h4>
+        <table class="comps-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Condition</th>
+              <th>Sold Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/236520304517?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item3711b56f85:g:HDgAAeSwylhpOwax" target="_blank">Kendra Scott Dust Bag Gold Letters Lot of 10 Jewelry Pouch D...</a></td>
+              <td>$16.50</td>
+              <td>Pre-owned</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/326909444108?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item4c1d52400c:g:i8cAAeSwsDRpOwIR" target="_blank">Bulk Lot of Gold Tone Costume Jewelry ~ 1 lb Mixed...</a></td>
+              <td>$60.00</td>
+              <td>Pre-owned - Good</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/326909150691?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item4c1d4dc5e3:g:y~sAAOSwIv1n0KM3" target="_blank">New Lot of 8 Paparazzi Jewelry Necklaces Earrings Boho Minim...</a></td>
+              <td>$14.59</td>
+              <td>New with packaging</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/306652480918?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item4765e98596:g:XnEAAeSwwdVpOhKQ" target="_blank">Jewelry Lot Mixed ,Vintage , Handmade ,Gold Filled,Sterling ...</a></td>
+              <td>$50.00</td>
+              <td>New without tags</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/257252500691?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item3be571a4d3:g:9hUAAeSwcEtpI~hN" target="_blank">HUGE Vintage to Now Funky Gold Silver Tone Estate Jewelry Lo...</a></td>
+              <td>$135.00</td>
+              <td>Pre-owned - Good</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/167994316662?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item271d3dd776:g:td0AAeSw8hBpOac8" target="_blank">151pc Paparazzi Costume Jewelry Lot Gold Silver Necklace Rin...</a></td>
+              <td>$200.00</td>
+              <td>Unspecified</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/267506902806?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item3e48a76716:g:1qQAAeSwy2xpOOuQ" target="_blank">Jewelry lot a few branded,some rose gold tone 17 piece neckl...</a></td>
+              <td>$19.99</td>
+              <td>Pre-owned</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/376766871042?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item57b90e3602:g:8ekAAeSwdVZpMhr7" target="_blank">Vintage to Modern Gold Tone Jewelry Lot 20 PCS Signed, Avon,...</a></td>
+              <td>$99.00</td>
+              <td>Pre-owned - Excellent</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/227124649413?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item34e1af1dc5:g:vgkAAeSwCyppOLu8" target="_blank">Vintage Estate Gold Filled Jewelry Lot Rings Necklace Sweeth...</a></td>
+              <td>$795.00</td>
+              <td>Pre-owned - Good</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/376766351099?_skw=gold+jewelry+lot+rings+earrings+necklace&hash=item57b90646fb:g:jnUAAeSwWzJo-maY" target="_blank">Jewelry Mixed Heavy Large Lot Silver Plated Gold Plated Cost...</a></td>
+              <td>$224.99</td>
+              <td>Pre-owned</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+      </div>
+
+      
+    </div>
+    
+    <div class="test-case">
+      <div class="test-title">Test 4: Rare Pokémon Card - Collectible</div>
+      <div class="test-desc">High-value collectible. Tests rarity/grading detection and premium pricing.</div>
+      
+      <div class="item-profile">
+        <strong>Listing Title:</strong> Pokémon Card: Charizard Base Set Holo 1st Edition - PSA 8 Graded
+      </div>
+
+      <div class="queries-section">
+        <h3>📍 Query Ladder (Fallback Chain)</h3>
+        <div class="query-ladder">
+          1. "Pokémon Charizard Base Set 1st Edition PSA 8"<br>2. "Charizard Base Set holo PSA"<br>3. "Pokémon Charizard Base Set"<br>4. "Charizard 1st Edition"<br>5. "Pokémon card Charizard"
+        </div>
+      </div>
+
+      <div class="results-section">
+        <h3>📊 Comp Matching Results</h3>
+        <div class="result-item">
+          <div class="result-label">Query Used (Ladder Level):</div>
+          <div class="result-value">Pokémon Charizard Base Set 1st Edition PSA 8 (Level 1)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Total Comps Found:</div>
+          <div class="result-value">50</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Median Sale Price:</div>
+          <div class="result-value">$1384.51</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Price Range:</div>
+          <div class="result-value">$25.00 - $88321.11</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Confidence Score:</div>
+          <div class="result-value confidence-high">HIGH</div>
+        </div>
+
+        
+        <h4 style="margin-top: 20px; font-size: 13px; color: #222;">Top Comps (Last 30 Days)</h4>
+        <table class="comps-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Condition</th>
+              <th>Sold Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/389355228018?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item5aa7614b72:g:Oz8AAeSwDu9pOSLw" target="_blank">[PSA 8] Pokemon Charizard #4/130 Holo - Base Set 2 2000 🔥...</a></td>
+              <td>$667.60</td>
+              <td>Graded</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/389353687194?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item5aa749c89a:g:dV4AAeSwih9pOJ2o" target="_blank">Topps Pokemon the Movie: 2000 Lugia and Pikachu Sticker Card...</a></td>
+              <td>$90.00</td>
+              <td>Graded</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/236513723802?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item371151059a:g:Sf8AAeSwAxlpNlNJ" target="_blank">1st Edition Shadowless Base Set Charizard PSA 8 !! WOTC Vint...</a></td>
+              <td>$29995.00</td>
+              <td>Graded</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/147013518846?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item223ab045fe:g:iOwAAeSwih9pNADU" target="_blank">Pokemon Trio 1st Edition Base Set Charizard, Blastoise, Venu...</a></td>
+              <td>$29999.99</td>
+              <td>Graded</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/236506489018?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item3710e2a0ba:g:LA4AAeSw-ctpMOR2" target="_blank">1999 POKEMON GAME #4 CHARIZARD HOLO PSA 8...</a></td>
+              <td>$1200.00</td>
+              <td>Graded</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/326890175461?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item4c1c2c3be5:g:dTkAAeSwctdpKi-W" target="_blank">2011 Pokemon Espeon PSA 8 Call OF Legends 4/95 Holo NM-Mint...</a></td>
+              <td>$59.99</td>
+              <td>Graded</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/277533338911?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item409e46ad1f:g:rcgAAeSwVNppJIYa" target="_blank">1st Edition Complete Base Set Spanish 1999 All PSA Graded 10...</a></td>
+              <td>$88321.11</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/157448128928?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item24a8a3c9a0:g:pwIAAeSwueppDmgj" target="_blank">Pokemon Expedition Base Set Feraligatr Art Booster Pack WOTC...</a></td>
+              <td>$940.00</td>
+              <td>New/Factory Sealed</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/389164837973?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item5a9c082c55:g:LSEAAeSwxPxpA8~U" target="_blank">1st Edition Charizard 4/102 PSA 8 NM-Mint Spanish Pokemon Ca...</a></td>
+              <td>$3599.95</td>
+              <td>Graded</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/286902641233?_skw=Pok%C3%A9mon+Charizard+Base+Set+1st+Edition+PSA+8&hash=item42ccbae251:g:ixEAAeSw2HRpAIYN" target="_blank">Pokemon PSA 8 Charizard #4 Holo 1St Edition Base Set Spanish...</a></td>
+              <td>$4092.08</td>
+              <td>Valutata</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+      </div>
+
+      
+    </div>
+    
+    <div class="test-case">
+      <div class="test-title">Test 5: Mid-Range Furniture - Commodity</div>
+      <div class="test-desc">Common furniture item. Tests category detection and commodity-style pricing.</div>
+      
+      <div class="item-profile">
+        <strong>Listing Title:</strong> IKEA Mid-Century Style Coffee Table - Like New
+      </div>
+
+      <div class="queries-section">
+        <h3>📍 Query Ladder (Fallback Chain)</h3>
+        <div class="query-ladder">
+          1. "IKEA coffee table mid-century"<br>2. "wooden coffee table"<br>3. "mid-century modern coffee table"<br>4. "coffee table wood"<br>5. "coffee table"
+        </div>
+      </div>
+
+      <div class="results-section">
+        <h3>📊 Comp Matching Results</h3>
+        <div class="result-item">
+          <div class="result-label">Query Used (Ladder Level):</div>
+          <div class="result-value">wooden coffee table (Level 2)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Total Comps Found:</div>
+          <div class="result-value">50</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Median Sale Price:</div>
+          <div class="result-value">$60.88</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Price Range:</div>
+          <div class="result-value">$15.55 - $401.97</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Confidence Score:</div>
+          <div class="result-value confidence-high">HIGH</div>
+        </div>
+
+        
+        <h4 style="margin-top: 20px; font-size: 13px; color: #222;">Top Comps (Last 30 Days)</h4>
+        <table class="comps-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Condition</th>
+              <th>Sold Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/287004522168?_skw=wooden+coffee+table&hash=item42d2cd76b8:g:qZcAAeSw4cVpOwsw" target="_blank">Nightcore Lift Top Coffee Table, Modern Wooden Center Table ...</a></td>
+              <td>$99.73</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/366053338101?_skw=wooden+coffee+table&hash=item553a7aabf5:g:Tc8AAeSwxVRpOwba" target="_blank">27.5" Black Round Coffee Table Modern Wooden Center Table fo...</a></td>
+              <td>$320.84</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/376770873523?_skw=wooden+coffee+table&hash=item57b94b48b3:g:J0gAAeSwDExpOwI7" target="_blank">Wood Serving Tray, Wooden Bead Decorative Tray, White Washed...</a></td>
+              <td>$24.83</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/167996744098?_skw=wooden+coffee+table&hash=item271d62e1a2:g:P4AAAeSwlitpOwKg" target="_blank">Round Wooden Tray Decor: Decorative Candle Plate Holder Tray...</a></td>
+              <td>$42.61</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/227127566546?_skw=wooden+coffee+table&hash=item34e1dba0d2:g:0gcAAeSwCrhpOwFn" target="_blank">Wooden Decorative Tray for Coffee Table, Wood Serving Tray w...</a></td>
+              <td>$40.84</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/197941588463?_skw=wooden+coffee+table&hash=item2e163cf1ef:g:R5kAAeSw8~ppOwFW" target="_blank">Wood Decorative Tray-Vitage Brown Washed Bead Tray for Coffe...</a></td>
+              <td>$68.84</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/116924619643?_skw=wooden+coffee+table&hash=item1b39401b7b:g:p3EAAeSw1bBpOv5t" target="_blank">Vintage Wooden Dollhouse Furniture 25+ Pieces Bed Benches Ta...</a></td>
+              <td>$49.99</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/187833920730?_skw=wooden+coffee+table&hash=item2bbbc62cda:g:0m8AAeSwmUdpOwDk" target="_blank">Handmade Wooden Decorative Tray, Small Beaded Coffee Table T...</a></td>
+              <td>$48.36</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/358007833458?_skw=wooden+coffee+table&hash=item535aee0372:g:J9kAAeSwaXxpOwEc" target="_blank">Wooden Tray,Oval Decorative Tray for Coffee Table Kitchen Di...</a></td>
+              <td>$41.57</td>
+              <td>Used</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+            <tr>
+              <td><a href="https://www.ebay.com/itm/358007827826?_skw=wooden+coffee+table&hash=item535aeded72:g:x4kAAeSwNDppOwBM" target="_blank">Wooden Knot Decoration Bohemian Decoration Hand-Carved Knot ...</a></td>
+              <td>$34.27</td>
+              <td>New</td>
+              <td>Invalid Date</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+      </div>
+
+      
+    </div>
+    
+
+    <div class="footer">
+      <p>✅ Test suite complete. Review accuracy and approve for Phase 2 production deployment.</p>
+    </div>
+  </div>
+</body>
+</html>
