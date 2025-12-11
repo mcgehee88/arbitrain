@@ -71,7 +71,7 @@ export class EBayClient {
     return this.token;
   }
 
-  async searchSoldListings(query: string): Promise<any[]> {
+  async searchSoldListings(query: string, condition: string): Promise<any[]> {
     try {
       const token = await this.getToken();
       
@@ -92,14 +92,20 @@ export class EBayClient {
         return [];
       }
 
-      return response.data.itemSummaries.map(item => ({
+      const mappedComps = response.data.itemSummaries.map(item => ({
         id: item.itemId,
         title: item.title,
-        price: parseFloat(item.price.value),
+        sold_price: parseFloat(item.price.value),
         condition: item.condition,
-        sold_date: item.soldDate || new Date().toISOString().split('T')[0],
-        url: item.itemWebUrl,
+        sold_date: item.soldDate || new Date().toISOString(),
+        shipping_cost: 0,
+        listing_type: 'auction',
+        is_outlier: false,
+        quality_score: 0.5,
+        source: 'ebay',
       }));
+
+      return mappedComps;
     } catch (error) {
       console.error('eBay search error:', error);
       throw error;
@@ -161,5 +167,6 @@ export class EBayClient {
     return conditionMap[ebayCondition] || 'unknown';
   }
 }
+
 
 
