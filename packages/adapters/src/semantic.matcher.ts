@@ -1,23 +1,21 @@
 export class SemanticMatcher {
-  private cache = new Map<string, number>();
+  calculateSimilarity(title1: string, title2: string): number {
+    const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+    const t1 = normalize(title1);
+    const t2 = normalize(title2);
+    
+    const words1 = new Set(t1.split(/\s+/));
+    const words2 = new Set(t2.split(/\s+/));
+    
+    const intersection = new Set([...words1].filter(w => words2.has(w)));
+    const union = new Set([...words1, ...words2]);
+    
+    return union.size === 0 ? 0 : intersection.size / union.size;
+  }
 
   async scoreComp(listingTitle: string, compTitle: string): Promise<number> {
-    const key = `${listingTitle}|${compTitle}`;
-    if (this.cache.has(key)) return this.cache.get(key)!;
-
-    const similarity = this.jaccardSimilarity(listingTitle, compTitle);
-    this.cache.set(key, similarity);
-    return similarity;
-  }
-
-  private jaccardSimilarity(str1: string, str2: string): number {
-    const tokens1 = new Set(str1.toLowerCase().split(/\s+/));
-    const tokens2 = new Set(str2.toLowerCase().split(/\s+/));
-    
-    const intersection = new Set([...tokens1].filter(x => tokens2.has(x)));
-    const union = new Set([...tokens1, ...tokens2]);
-    
-    return union.size > 0 ? intersection.size / union.size : 0;
+    return this.calculateSimilarity(listingTitle, compTitle);
   }
 }
+
 

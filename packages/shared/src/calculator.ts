@@ -1,6 +1,8 @@
 import { Comp, CalculationOutput, ItemProfile, Listing, Condition } from './types';
 import { SemanticMatcher } from '../../adapters/src/semantic.matcher';
 
+const SIMILARITY_THRESHOLD = 0.3;
+
 export class CalculationEngine {
   private semanticMatcher = new SemanticMatcher();
 
@@ -39,7 +41,7 @@ export class CalculationEngine {
 
     // Filter: Keep comps with >30% title similarity (captures same product class)
     const validComps = scoredComps
-      .filter(s => s.similarity > 0.3)
+      .filter(s => s.similarity > SIMILARITY_THRESHOLD)
       .sort((a, b) => b.similarity - a.similarity)
       .slice(0, 15) // Top 15 most similar
       .map(s => s.comp);
@@ -129,4 +131,5 @@ export class CalculationEngine {
     return Math.sqrt(variance);
   }
 }
+
 
