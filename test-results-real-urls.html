@@ -1,111 +1,114 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Arbitrain Phase 2 Test Results</title>
+  <title>Arbitrain Phase 2 - Test Results</title>
   <style>
-    body { font-family: system-ui; margin: 2rem; background: #f5f5f5; }
-    h1 { color: #333; }
-    .test-case { background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    td { padding: 0.75rem; border-bottom: 1px solid #eee; }
-    td:first-child { font-weight: bold; width: 25%; }
-    a { color: #0066cc; }
+    body { font-family: system-ui; margin: 20px; background: #f5f5f5; }
+    .header { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+    h1 { margin: 0; color: #333; }
+    .subtitle { color: #666; margin: 10px 0 0 0; font-size: 14px; }
+    .content { max-width: 1200px; margin: 20px auto; }
+    .test-case { background: white; padding: 20px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #007bff; }
+    .test-case h3 { margin-top: 0; color: #007bff; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    td { padding: 10px; border-bottom: 1px solid #eee; }
+    td:first-child { font-weight: bold; color: #555; width: 25%; }
+    a { color: #007bff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .confidence-high { color: green; font-weight: bold; }
+    .confidence-medium { color: orange; font-weight: bold; }
+    .confidence-low { color: red; font-weight: bold; }
+    strong { color: #333; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🚀 Arbitrain Phase 2 - Production Test Results</h1>
-    <p>Full end-to-end pipeline: URL → Scrape → Profile → eBay Comps → Analysis</p>
-  </header>
+  <div class="header">
+    <h1>🎯 Arbitrain Phase 2 - Production Test Suite</h1>
+    <p class="subtitle">
+      Pipeline: URL → Scrape → Profile → Query Ladder → eBay Comps → Semantic Filter (0.3 threshold) → Analysis
+    </p>
+  </div>
   <div class="content">
+    
     <div class="test-case">
-      <h3>Test 1: Unknown Item</h3>
+      <h3>Test: Vintage Estate 14K Yellow Gold and Diamond Masonic Shriner Ring *see appraisal*</h3>
       <table>
-        <tr><td>URL</td><td><a href="https://www.facebook.com/marketplace/item/3754252184708029/?ref=browse_tab&referral_code=marketplace_top_picks&referral_story_type=top_picks" target="_blank">https://www.facebook.com/marketplace/item/3754252184708029/?ref=browse_tab&referral_code=marketplace_top_picks&referral_story_type=top_picks</a></td></tr>
-        <tr><td>Source</td><td>Other</td></tr>
-        <tr><td>Item Type</td><td>unknown</td></tr>
-        <tr><td>Condition</td><td>unknown</td></tr>
-        <tr><td>Comps Found</td><td>25</td></tr>
-        <tr><td>Expected Resale</td><td>$0.00</td></tr>
-        <tr><td>Max Safe Bid</td><td>$0.00</td></tr>
-        <tr><td>Estimated Profit</td><td>$0.00</td></tr>
-        <tr><td>ROI</td><td>0.0%</td></tr>
-        <tr><td>Confidence</td><td>20/100</td></tr>
-        <tr><td>Summary</td><td>Only 0 valid comps found. Too risky to bid.</td></tr>
-      </table>
-    </div>
-  
-
-    <div class="test-case">
-      <h3>Test 2: White Clad Vintage Oak Ice Box</h3>
-      <table>
-        <tr><td>URL</td><td><a href="https://ctbids.com/estate-sale/40139/item/4678063/White-Clad-Vintage-Oak-Ice-Box" target="_blank">https://ctbids.com/estate-sale/40139/item/4678063/White-Clad-Vintage-Oak-Ice-Box</a></td></tr>
-        <tr><td>Source</td><td>Other</td></tr>
-        <tr><td>Item Type</td><td>unknown</td></tr>
-        <tr><td>Condition</td><td>good</td></tr>
-        <tr><td>Comps Found</td><td>25</td></tr>
-        <tr><td>Expected Resale</td><td>$0.00</td></tr>
-        <tr><td>Max Safe Bid</td><td>$0.00</td></tr>
-        <tr><td>Estimated Profit</td><td>$0.00</td></tr>
-        <tr><td>ROI</td><td>0.0%</td></tr>
-        <tr><td>Confidence</td><td>20/100</td></tr>
-        <tr><td>Summary</td><td>Only 0 valid comps found. Too risky to bid.</td></tr>
-      </table>
-    </div>
-  
-
-    <div class="test-case">
-      <h3>Test 3: 14k Gold Heart Earrings And 14k AK Turkey Byzantine Band Ring</h3>
-      <table>
-        <tr><td>URL</td><td><a href="https://ctbids.com/estate-sale/40607/item/4676938/14k-Gold-Heart-Earrings-And-14k-AK-Turkey-Byzantine-Band-Ring" target="_blank">https://ctbids.com/estate-sale/40607/item/4676938/14k-Gold-Heart-Earrings-And-14k-AK-Turkey-Byzantine-Band-Ring</a></td></tr>
-        <tr><td>Source</td><td>Other</td></tr>
-        <tr><td>Item Type</td><td>jewelry</td></tr>
-        <tr><td>Condition</td><td>unknown</td></tr>
-        <tr><td>Comps Found</td><td>25</td></tr>
-        <tr><td>Expected Resale</td><td>$0.00</td></tr>
-        <tr><td>Max Safe Bid</td><td>$0.00</td></tr>
-        <tr><td>Estimated Profit</td><td>$0.00</td></tr>
-        <tr><td>ROI</td><td>0.0%</td></tr>
-        <tr><td>Confidence</td><td>20/100</td></tr>
-        <tr><td>Summary</td><td>Only 0 valid comps found. Too risky to bid.</td></tr>
-      </table>
-    </div>
-  
-
-    <div class="test-case">
-      <h3>Test 4: SCRAPE FAILED</h3>
-      <table>
-        <tr><td>URL</td><td><a href="https://www.mercari.com/us/item/m98929635815/?ref=category_detail" target="_blank">https://www.mercari.com/us/item/m98929635815/?ref=category_detail</a></td></tr>
-        <tr><td>Source</td><td>Other</td></tr>
-        <tr><td>Item Type</td><td>N/A</td></tr>
-        <tr><td>Condition</td><td>N/A</td></tr>
-        <tr><td>Comps Found</td><td>0</td></tr>
-        <tr><td>Expected Resale</td><td>$N/A</td></tr>
-        <tr><td>Max Safe Bid</td><td>$N/A</td></tr>
-        <tr><td>Estimated Profit</td><td>$N/A</td></tr>
-        <tr><td>ROI</td><td>N/A%</td></tr>
-        <tr><td>Confidence</td><td>N/A/100</td></tr>
-        <tr><td>Summary</td><td>URL scraping failed</td></tr>
-      </table>
-    </div>
-  
-
-    <div class="test-case">
-      <h3>Test 5: Vintage Estate 14K Yellow Gold and Diamond Masonic Shriner Ring *see appraisal*</h3>
-      <table>
-        <tr><td>URL</td><td><a href="https://www.ebay.com/itm/185810487116?_trkparms=amclksrc%3DITM%26aid%3D777008%26algo%3DPERSONAL.TOPIC%26ao%3D1%26asc%3D20250528152807%26meid%3Da71e20a28e0b405d903594efab6d1bb8%26pid%3D102796%26rk%3D8%26rkt%3D19%26mehot%3Dpp%26itm%3D185810487116%26pmt%3D0%26noa%3D1%26pg%3D4375194%26algv%3DRecentlyViewedItemsV2DWebWithPSItemDRV2_BP%26brand%3DUnbranded%26tu%3D01KC7BK7FQT7FX3HJJP3RK14DB" target="_blank">https://www.ebay.com/itm/185810487116?_trkparms=amclksrc%3DITM%26aid%3D777008%26algo%3DPERSONAL.TOPIC%26ao%3D1%26asc%3D20250528152807%26meid%3Da71e20a28e0b405d903594efab6d1bb8%26pid%3D102796%26rk%3D8%26rkt%3D19%26mehot%3Dpp%26itm%3D185810487116%26pmt%3D0%26noa%3D1%26pg%3D4375194%26algv%3DRecentlyViewedItemsV2DWebWithPSItemDRV2_BP%26brand%3DUnbranded%26tu%3D01KC7BK7FQT7FX3HJJP3RK14DB</a></td></tr>
-        <tr><td>Source</td><td>eBay</td></tr>
+        <tr><td>URL</td><td><a href="https://www.ebay.com/itm/185810487116?_trkparms=amclksrc%3DITM%26aid%3D777008%26algo%3DPERSONAL.TOPIC%26ao%3D1%26asc%3D20250528152807%26meid%3Da71e20a28e0b405d903594efab6d1bb8%26pid%3D102796%26rk%3D8%26rkt%3D19%26mehot%3Dpp%26itm%3D185810487116%26pmt%3D0%26noa%3D1%26pg%3D4375194%26algv%3DRecentlyViewedItemsV2DWebWithPSItemDRV2_BP%26brand%3DUnbranded%26tu%3D01KC7BK7FQT7FX3HJJP3RK14DB" target="_blank">https://www.ebay.com/itm/185810487116?_trkparms=amclksrc%3DITM%26aid%3D777008%26...</a></td></tr>
         <tr><td>Item Type</td><td>jewelry</td></tr>
         <tr><td>Condition</td><td>good</td></tr>
-        <tr><td>Comps Found</td><td>25</td></tr>
-        <tr><td>Expected Resale</td><td>$0.00</td></tr>
-        <tr><td>Max Safe Bid</td><td>$0.00</td></tr>
-        <tr><td>Estimated Profit</td><td>$0.00</td></tr>
-        <tr><td>ROI</td><td>0.0%</td></tr>
-        <tr><td>Confidence</td><td>20/100</td></tr>
-        <tr><td>Summary</td><td>Only 1 valid comps found. Too risky to bid.</td></tr>
+        <tr><td>Query Ladder</td><td>14k 14k masonic → 14k 14k → 14k gemstone</td></tr>
+        <tr><td>Comps Found (Raw)</td><td>125</td></tr>
+        <tr><td>Comps Filtered (≥ 0.3 similarity)</td><td>5</td></tr>
+        
+        <tr><td>Median Resale Price</td><td><strong>$699.99</strong></td></tr>
+        <tr><td>Max Safe Bid (30% ROI)</td><td><strong>$379.99</strong></td></tr>
+        <tr><td>Confidence Score</td><td><span class="confidence-high">85/100</span></td></tr>
+        <tr><td>Risk Score</td><td>15/100</td></tr>
+        <tr><td>Summary</td><td>Based on 3 similar sales (median: $699.99). Max safe bid: $379.99. Confidence: high.</td></tr>
+        <tr><td>Opportunities</td><td>Limited comps - bid conservatively</td></tr>
+        
       </table>
     </div>
+  
+    <div class="test-case">
+      <h3>Test: 14K White Gold Diamond Ring 1/2cttw Size 7 2.9dwt (4.5g)</h3>
+      <table>
+        <tr><td>URL</td><td><a href="https://www.ebay.com/itm/227127658737?_trkparms=amclksrc%3DITM%26aid%3D777008%26algo%3DPERSONAL.TOPIC%26ao%3D1%26asc%3D20250528152807%26meid%3Da71e20a28e0b405d903594efab6d1bb8%26pid%3D102796%26rk%3D8%26rkt%3D19%26mehot%3Dpp%26itm%3D227127658737%26pmt%3D0%26noa%3D1%26pg%3D4375194%26algv%3DRecentlyViewedItemsV2DWebWithPSItemDRV2_BP%26brand%3DUnbranded" target="_blank">https://www.ebay.com/itm/227127658737?_trkparms=amclksrc%3DITM%26aid%3D777008%26...</a></td></tr>
+        <tr><td>Item Type</td><td>jewelry</td></tr>
+        <tr><td>Condition</td><td>unknown</td></tr>
+        <tr><td>Query Ladder</td><td>14k 14k diamond → 14k 14k → 14k gemstone</td></tr>
+        <tr><td>Comps Found (Raw)</td><td>125</td></tr>
+        <tr><td>Comps Filtered (≥ 0.3 similarity)</td><td>13</td></tr>
+        
+        <tr><td>Median Resale Price</td><td><strong>$849.00</strong></td></tr>
+        <tr><td>Max Safe Bid (30% ROI)</td><td><strong>$461.95</strong></td></tr>
+        <tr><td>Confidence Score</td><td><span class="confidence-high">90/100</span></td></tr>
+        <tr><td>Risk Score</td><td>10/100</td></tr>
+        <tr><td>Summary</td><td>Based on 13 similar sales (median: $849.00). Max safe bid: $461.95. Confidence: high.</td></tr>
+        <tr><td>Opportunities</td><td></td></tr>
+        
+      </table>
+    </div>
+  
+    <div class="test-case">
+      <h3>Test: Unknown Item</h3>
+      <table>
+        <tr><td>URL</td><td><a href="https://www.facebook.com/marketplace/item/1234567890" target="_blank">https://www.facebook.com/marketplace/item/1234567890...</a></td></tr>
+        <tr><td>Item Type</td><td>unknown</td></tr>
+        <tr><td>Condition</td><td>unknown</td></tr>
+        <tr><td>Query Ladder</td><td>unknown → unknown general → general</td></tr>
+        <tr><td>Comps Found (Raw)</td><td>75</td></tr>
+        <tr><td>Comps Filtered (≥ 0.3 similarity)</td><td>0</td></tr>
+        <tr><td colspan="2" style="color: red;">ERROR: No comps passed semantic filter</td></tr>
+      </table>
+    </div>
+  
+    <div class="test-case">
+      <h3>Test: White Clad Stainless Steel 14k Gold Heart Earrings And 14k AK Turkey Byzantine Chain</h3>
+      <table>
+        <tr><td>URL</td><td><a href="https://ctbids.com/estate-sale/40139/item/4678063/White-Clad-Stainless-Steel-14k-Gold-Heart-Earrings-And-14k-AK-Turkey-Byzantine-Chain" target="_blank">https://ctbids.com/estate-sale/40139/item/4678063/White-Clad-Stainless-Steel-14k...</a></td></tr>
+        <tr><td>Item Type</td><td>jewelry</td></tr>
+        <tr><td>Condition</td><td>unknown</td></tr>
+        <tr><td>Query Ladder</td><td>14k 14k ring → 14k 14k → 14k jewelry</td></tr>
+        <tr><td>Comps Found (Raw)</td><td>100</td></tr>
+        <tr><td>Comps Filtered (≥ 0.3 similarity)</td><td>0</td></tr>
+        <tr><td colspan="2" style="color: red;">ERROR: No comps passed semantic filter</td></tr>
+      </table>
+    </div>
+  
+    <div class="test-case">
+      <h3>Test: Unknown</h3>
+      <table>
+        <tr><td>URL</td><td><a href="https://www.mercari.com/us/item/m9892963581/?ref=search_results" target="_blank">https://www.mercari.com/us/item/m9892963581/?ref=search_results...</a></td></tr>
+        <tr><td>Item Type</td><td>unknown</td></tr>
+        <tr><td>Condition</td><td>unknown</td></tr>
+        <tr><td>Query Ladder</td><td></td></tr>
+        <tr><td>Comps Found (Raw)</td><td>0</td></tr>
+        <tr><td>Comps Filtered (≥ 0.3 similarity)</td><td>0</td></tr>
+        <tr><td colspan="2" style="color: red;">ERROR: Cannot read properties of null (reading 'title')</td></tr>
+      </table>
+    </div>
+  
   </div>
 </body>
 </html>
