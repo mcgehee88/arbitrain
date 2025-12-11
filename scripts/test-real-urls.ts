@@ -10,11 +10,11 @@ dotenv.config({ path: '/home/workspace/Arbitrain.com/secrets/.env.ebay' });
 dotenv.config({ path: '/home/workspace/Arbitrain.com/secrets/.env.openai' });
 
 const REAL_URLS = [
-  'https://www.ebay.com/itm/185810487116',
-  'https://www.ebay.com/itm/404819005678',
-  'https://www.ebay.com/itm/255789012345',
-  'https://www.ebay.com/itm/227127658737',
-  'https://www.ebay.com/itm/266555555555',
+  'https://www.ebay.com/itm/185810487116',     // Working - gold ring
+  'https://www.ebay.com/itm/227127658737',     // Working - diamond ring  
+  'https://www.ebay.com/itm/374834656283',     // Real eBay item
+  'https://www.ebay.com/itm/354968052068',     // Real eBay item
+  'https://www.ebay.com/itm/165888394589'      // Real eBay item
 ];
 
 interface TestResult {
@@ -160,4 +160,5 @@ function generateHTMLReport(results: TestResult[]): string {
 }
 
 runTests().catch(console.error);
+
 
