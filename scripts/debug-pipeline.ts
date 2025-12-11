@@ -76,11 +76,11 @@ async function debugPipeline() {
     console.log(`Comp: "${comp.title}"`);
     console.log(`  Similarity Score: ${similarity.toFixed(3)}`);
     
-    if (similarity >= 0.5) {
-      console.log(`  ✓ KEPT (>= 0.5 threshold)`);
+    if (similarity >= 0.3) {
+      console.log(`  ✓ KEPT (>= 0.3 threshold)`);
       filteredComps.push(comp);
     } else {
-      console.log(`  ✗ FILTERED OUT (< 0.5 threshold)`);
+      console.log(`  ✗ FILTERED OUT (< 0.3 threshold)`);
     }
   }
 
@@ -92,10 +92,13 @@ async function debugPipeline() {
   console.log('STEP 6: CALCULATION ENGINE');
   console.log('='.repeat(80));
   const calculator = new CalculationEngine();
-  const listing = { url: testUrl };
+  const listing = { 
+    url: testUrl,
+    title: scraped.title 
+  };
   
   try {
-    const analysis = calculator.analyze(profile, queryLadder, filteredComps, listing as any);
+    const analysis = await calculator.analyze(profile, queryLadder, filteredComps, listing as any);
     console.log('Analysis Result:', JSON.stringify(analysis, null, 2));
   } catch (error: any) {
     console.log('Analysis Error:', error.message);
@@ -104,4 +107,7 @@ async function debugPipeline() {
 }
 
 debugPipeline().catch(console.error);
+
+
+
 
