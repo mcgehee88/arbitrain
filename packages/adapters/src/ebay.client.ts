@@ -71,6 +71,41 @@ export class EBayClient {
     return this.token;
   }
 
+  async searchSoldListings(query: string): Promise<any[]> {
+    try {
+      const token = await this.getToken();
+      
+      const response = await this.client.get<EBaySearchResponse>('/buy/browse/v1/item_summary/search', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'X-EBAY-C-MARKETPLACE-ID': 'EBAY_US',
+        },
+        params: {
+          q: query,
+          filter: 'conditionIds:{3000}',
+          limit: 25,
+          sort: '-soldDate',
+        }
+      });
+
+      if (!response.data.itemSummaries) {
+        return [];
+      }
+
+      return response.data.itemSummaries.map(item => ({
+        id: item.itemId,
+        title: item.title,
+        price: parseFloat(item.price.value),
+        condition: item.condition,
+        sold_date: item.soldDate || new Date().toISOString().split('T')[0],
+        url: item.itemWebUrl,
+      }));
+    } catch (error) {
+      console.error('eBay search error:', error);
+      throw error;
+    }
+  }
+
   async searchSoldComps(
     query: string,
     limit: number = 50,
@@ -126,4 +161,5 @@ export class EBayClient {
     return conditionMap[ebayCondition] || 'unknown';
   }
 }
+
 

@@ -80,6 +80,30 @@ export class ItemExtractor {
     };
   }
 
+  generateQueryLadder(profile: ItemProfile): string[] {
+    const queries: string[] = [];
+    
+    // Primary query: brand + model + type
+    if (profile.brand && profile.model) {
+      queries.push(`${profile.brand} ${profile.model}`);
+    }
+    
+    // Secondary: brand + type + condition
+    if (profile.brand) {
+      queries.push(`${profile.brand} ${profile.item_type}`);
+    }
+    
+    // Tertiary: item type + condition
+    queries.push(`${profile.item_type} ${profile.condition}`);
+    
+    // Fallback: just item type
+    if (queries.length === 0) {
+      queries.push(profile.item_type);
+    }
+    
+    return queries;
+  }
+
   private detectItemType(text: string): ItemType {
     for (const [type, patterns] of Object.entries(ITEM_TYPE_PATTERNS)) {
       if (type === 'unknown') continue;
@@ -175,4 +199,5 @@ export class ItemExtractor {
     return categoryMap[itemType];
   }
 }
+
 

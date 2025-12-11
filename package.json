@@ -16,15 +16,16 @@
     "url": "git+https://github.com/mcgehee88/arbitrain.git"
   },
   "devDependencies": {
+    "@types/node": "^22.7.7",
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "tsx": "^4.21.0",
-    "typescript": "^5.7.2",
-    "@types/node": "^22.7.7"
+    "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@types/jsdom": "^27.0.0",
     "axios": "^1.7.7",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "jsdom": "^27.3.0"
   }
 }
-
