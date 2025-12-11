@@ -1,0 +1,13 @@
+{
+  "name": "@arbitrain/web",
+  "version": "1.0.0",
+  "description": "Arbitrain frontend",
+  "scripts": {
+    "dev": "echo 'Phase 2: Add Vite + React'",
+    "build": "echo 'Phase 2: Build will happen here'"
+  },
+  "dependencies": {
+    "@arbitrain/shared": "workspace:*"
+  }
+}
+

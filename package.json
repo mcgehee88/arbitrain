@@ -1,0 +1,25 @@
+{
+  "name": "arbitrain",
+  "version": "1.0.0",
+  "description": "Arbitrage analysis SaaS",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcgehee88/arbitrain.git"
+  },
+  "workspaces": [
+    "apps/web",
+    "apps/api",
+    "packages/shared",
+    "packages/adapters",
+    "packages/config"
+  ]
+}
