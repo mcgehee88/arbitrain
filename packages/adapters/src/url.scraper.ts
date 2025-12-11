@@ -14,7 +14,6 @@ export class URLScraper {
       if (url.includes('ebay.com')) {
         return await this.scrapeEBay(url);
       }
-      // Fallback for other marketplaces
       return await this.scrapeGeneric(url);
     } catch (err) {
       console.log(`Scrape failed for ${url}: ${err}`);
@@ -32,21 +31,30 @@ export class URLScraper {
     const dom = new JSDOM(data);
     const doc = dom.window.document;
 
-    // eBay title is in <h1 class="it-title"> or <span id="itemTitle">
-    let title = doc.querySelector('h1.it-title')?.textContent?.trim() ||
-                doc.querySelector('span#itemTitle')?.textContent?.trim() ||
-                doc.querySelector('[data-test-id="vi-acc-del-range"]')?.textContent?.trim() ||
-                'Unknown Item';
+    // Try to extract from schema.org Product name
+    let title = 'Unknown Item';
+    const htmlText = data || '';
+    
+    // Look for Schema.org Product definition with name
+    const productMatch = htmlText.match(/"@type":"Product"[^}]*?"name":"([^"]+)"/);
+    if (productMatch) {
+      title = productMatch[1].substring(0, 200);
+    }
 
-    title = title.split('|')[0].trim(); // Remove extra info after |
+    // Fallback: Look for text patterns
+    if (title === 'Unknown Item') {
+      const textMatch = htmlText.match(/Picture \d+ of \d+([^<]{20,200}?)(?:Have one to sell|$)/);
+      if (textMatch) {
+        title = textMatch[1].trim().substring(0, 200);
+      }
+    }
 
-    // Try to extract condition
-    const condText = doc.body.textContent || '';
+    // Try to extract condition from body text
     let condition = 'unknown';
-    if (condText.includes('Used - Good')) condition = 'good';
-    else if (condText.includes('New')) condition = 'new';
-    else if (condText.includes('Like New')) condition = 'like_new';
-    else if (condText.includes('Pre-owned')) condition = 'used';
+    if (htmlText.includes('Pre-owned - Good')) condition = 'good';
+    else if (htmlText.includes('New')) condition = 'new';
+    else if (htmlText.includes('Like New')) condition = 'like_new';
+    else if (htmlText.includes('Pre-owned')) condition = 'used';
 
     return {
       title: title || 'Unknown Item',
