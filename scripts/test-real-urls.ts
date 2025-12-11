@@ -10,11 +10,11 @@ dotenv.config({ path: '/home/workspace/Arbitrain.com/secrets/.env.ebay' });
 dotenv.config({ path: '/home/workspace/Arbitrain.com/secrets/.env.openai' });
 
 const REAL_URLS = [
-  'https://www.ebay.com/itm/185810487116',     // Working - gold ring
-  'https://www.ebay.com/itm/227127658737',     // Working - diamond ring  
-  'https://www.ebay.com/itm/374834656283',     // Real eBay item
-  'https://www.ebay.com/itm/354968052068',     // Real eBay item
-  'https://www.ebay.com/itm/165888394589'      // Real eBay item
+  'https://www.facebook.com/marketplace/item/3754252184708029/?ref=browse_tab&referral_code=marketplace_top_picks&referral_story_type=top_picks',
+  'https://ctbids.com/estate-sale/40139/item/4678063/White-Clad-Vintage-Oak-Ice-Box',
+  'https://ctbids.com/estate-sale/40607/item/4676938/14k-Gold-Heart-Earrings-And-14k-AK-Turkey-Byzantine-Band-Ring',
+  'https://www.mercari.com/us/item/m98929635815/?ref=category_detail',
+  'https://www.ebay.com/itm/185810487116?_trkparms=amclksrc%3DITM%26aid%3D777008%26algo%3DPERSONAL.TOPIC%26ao%3D1%26asc%3D20250528152807%26meid%3Da71e20a28e0b405d903594efab6d1bb8%26pid%3D102796%26rk%3D8%26rkt%3D19%26mehot%3Dpp%26itm%3D185810487116%26pmt%3D0%26noa%3D1%26pg%3D4375194%26algv%3DRecentlyViewedItemsV2DWebWithPSItemDRV2_BP%26brand%3DUnbranded%26tu%3D01KC7BK7FQT7FX3HJJP3RK14DB'
 ];
 
 interface TestResult {
@@ -160,5 +160,6 @@ function generateHTMLReport(results: TestResult[]): string {
 }
 
 runTests().catch(console.error);
+
 
 
