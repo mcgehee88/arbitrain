@@ -1,17 +1,25 @@
 import { Comp, CalculationOutput, ItemProfile, Listing, Condition } from './types';
-import { ConfidenceScorer, ConfidenceLevel } from './confidence.scorer';
+import { SemanticMatcher } from '../../../packages/adapters/src/semantic.matcher';
+import { TaxonomyMatcher } from '../../../packages/adapters/src/taxonomy.matcher';
+import { ConfidenceScorer } from './confidence.scorer';
 
 export class CalculationEngine {
-  private targetROI = 0.3;
-  private confidenceScorer = new ConfidenceScorer();
+  private semanticMatcher: SemanticMatcher;
+  private taxonomyMatcher: TaxonomyMatcher;
+  private confidenceScorer: ConfidenceScorer;
 
-  analyze(
+  constructor(openaiKey: string) {
+    this.semanticMatcher = new SemanticMatcher(openaiKey);
+    this.taxonomyMatcher = new TaxonomyMatcher();
+    this.confidenceScorer = new ConfidenceScorer();
+  }
+
+  async analyze(
     itemProfile: ItemProfile,
+    queryLadder: string[],
     comps: Comp[],
-    listing: Listing,
-    primaryQuery: string,
-    queryLadder: string[]
-  ): CalculationOutput {
+    listing: Listing
+  ): Promise<CalculationOutput> {
     if (!comps || comps.length === 0) {
       return {
         expected_resale_price: 0,
@@ -19,94 +27,129 @@ export class CalculationEngine {
         estimated_profit: 0,
         estimated_roi_percent: 0,
         opportunity_score: 0,
-        confidence_label: 'MANUAL_REVIEW',
+        risk_score: 0,
         confidence_score: 0,
-        num_comps: 0,
-        price_low: 0,
-        price_high: 0,
-        price_median: 0,
-        price_variance: 0,
         explanation: {
-          summary: 'No comparable sold listings found. Manual research required.',
+          summary: 'No comparable sales found.',
           resale_reasoning: 'Insufficient data.',
           max_bid_reasoning: 'Cannot calculate without comps.',
-          risk_factors: ['No market data available'],
+          risk_factors: ['No comps available'],
           opportunities: [],
+          warnings: ['Unable to provide accurate analysis.'],
         },
       };
     }
 
-    // Extract prices
-    const prices = comps.map((c) => c.sold_price).filter((p) => p > 0);
-    const sortedPrices = prices.sort((a, b) => a - b);
-    const median = sortedPrices[Math.floor(sortedPrices.length / 2)];
-    const low = sortedPrices[0];
-    const high = sortedPrices[sortedPrices.length - 1];
-
-    // Calculate variance
-    const mean = prices.reduce((a, b) => a + b, 0) / prices.length;
-    const variance =
-      Math.sqrt(prices.reduce((sum, p) => sum + Math.pow(p - mean, 2), 0) / prices.length) /
-      mean;
-
-    // Calculate confidence
-    const avgSemanticQuality = 0.82; // Placeholder - would come from semantic matcher
-    const avgTaxonomyScore = 72; // Placeholder - would come from taxonomy matcher
-    const confidenceBreakdown = this.confidenceScorer.score(
-      comps.length,
-      variance,
-      avgSemanticQuality,
-      avgTaxonomyScore
+    // Score each comp using semantic matching
+    const scoredComps = await Promise.all(
+      comps.map(async (comp) => ({
+        ...comp,
+        semanticScore: await this.semanticMatcher.scoreComp(listing.title, comp.title),
+        taxonomyScore: this.taxonomyMatcher.scoreMatch(itemProfile, comp.title),
+      }))
     );
 
-    // Calculate max bid (conservative)
-    const buyersPremium = median * 0.12;
-    const shippingEstimate = 8;
-    const resaleFees = median * 0.15;
-    const desiredProfit = median * this.targetROI;
-    const maxBid = median - buyersPremium - shippingEstimate - resaleFees - desiredProfit;
+    // Filter: keep only high-quality comps (both semantic and taxonomy)
+    const qualityComps = scoredComps.filter(
+      (c) => c.semanticScore > 0.70 && c.taxonomyScore > 0.60
+    );
 
-    const estimatedProfit = median - listing.current_price - buyersPremium - shippingEstimate - resaleFees;
-    const roi = estimatedProfit > 0 ? estimatedProfit / (listing.current_price + buyersPremium) : 0;
+    if (qualityComps.length === 0) {
+      return {
+        expected_resale_price: 0,
+        max_safe_bid: 0,
+        estimated_profit: 0,
+        estimated_roi_percent: 0,
+        opportunity_score: 0,
+        risk_score: 0,
+        confidence_score: 0,
+        explanation: {
+          summary: 'No sufficiently similar comps found after quality filtering.',
+          resale_reasoning: 'Available comps are not similar enough to this item.',
+          max_bid_reasoning: 'Cannot estimate safely with low-quality matches.',
+          risk_factors: ['Poor comp match quality'],
+          opportunities: [],
+          warnings: ['Expand search or try different keywords.'],
+        },
+      };
+    }
+
+    // Calculate statistics from quality comps
+    const prices = qualityComps.map((c) => c.sold_price).sort((a, b) => a - b);
+    const median = prices[Math.floor(prices.length / 2)];
+    const low = prices[0];
+    const high = prices[prices.length - 1];
+
+    // Estimate resale price (median from comps)
+    const resalePrice = median;
+
+    // Calculate max safe bid
+    const buyerPremium = listing.current_bid * 0.12;
+    const shipping = 5;
+    const resaleFees = resalePrice * 0.15;
+    const targetProfit = resalePrice * 0.30;
+    const maxSafeBid = resalePrice - buyerPremium - shipping - resaleFees - targetProfit;
+
+    // Calculate confidence
+    const confidenceData = {
+      numComps: qualityComps.length,
+      avgSemanticScore: qualityComps.reduce((sum, c) => sum + c.semanticScore, 0) / qualityComps.length,
+      priceVariance: this.calculateVariance(prices),
+      medianPrice: median,
+    };
+    const confidenceResult = this.confidenceScorer.score(confidenceData);
+
+    // Estimate profit and ROI
+    const currentBid = listing.current_bid;
+    const estimatedProfit = resalePrice - currentBid - buyerPremium - shipping - resaleFees;
+    const estimatedROI = currentBid > 0 ? (estimatedProfit / currentBid) * 100 : 0;
 
     return {
-      expected_resale_price: Math.round(median * 100) / 100,
-      max_safe_bid: Math.round(maxBid * 100) / 100,
-      estimated_profit: Math.round(estimatedProfit * 100) / 100,
-      estimated_roi_percent: Math.round(roi * 10000) / 100,
-      opportunity_score: this.calculateOpportunityScore(roi, variance),
-      confidence_label: confidenceBreakdown.level,
-      confidence_score: confidenceBreakdown.factors.compCount,
-      num_comps: comps.length,
-      price_low: Math.round(low * 100) / 100,
-      price_high: Math.round(high * 100) / 100,
-      price_median: Math.round(median * 100) / 100,
-      price_variance: Math.round(variance * 10000) / 100,
+      expected_resale_price: resalePrice,
+      max_safe_bid: Math.max(0, maxSafeBid),
+      estimated_profit: estimatedProfit,
+      estimated_roi_percent: estimatedROI,
+      opportunity_score: estimatedROI > 20 ? 80 : estimatedROI > 10 ? 60 : 40,
+      risk_score: this.calculateRiskScore(prices),
+      confidence_score: confidenceResult.score,
       explanation: {
-        summary: `${comps.length} verified comps. Resale: $${median.toFixed(2)}. Max bid: $${maxBid.toFixed(2)}. Confidence: ${confidenceBreakdown.level} (${confidenceBreakdown.score}/100).`,
-        resale_reasoning: `Median sold price from ${comps.length} recent comps is $${median.toFixed(2)}. Range: $${low.toFixed(2)} - $${high.toFixed(2)}.`,
-        max_bid_reasoning: `Max bid = Median ($${median.toFixed(2)}) - Buyer premium (12%) - Shipping ($8) - Resale fees (15%) - Desired profit (30%).`,
-        risk_factors: [
-          variance > 0.35 ? 'High price variance' : 'Price stable',
-          comps.length < 5 ? 'Limited comps' : 'Sufficient comps',
-        ],
-        opportunities: [
-          estimatedProfit > median * 0.3
-            ? 'Strong profit potential'
-            : estimatedProfit > 0
-              ? 'Modest profit potential'
-              : 'Poor economics',
-        ],
+        summary: `Expected resale: $${resalePrice.toFixed(2)}. Max safe bid: $${maxSafeBid.toFixed(2)}. Estimated profit: $${estimatedProfit.toFixed(2)} at ${estimatedROI.toFixed(1)}% ROI.`,
+        resale_reasoning: `Median sold price from ${qualityComps.length} quality comps is $${median.toFixed(2)} (range: $${low.toFixed(2)}-$${high.toFixed(2)}).`,
+        max_bid_reasoning: `Max bid accounts for buyer premium (12%), shipping ($${shipping}), resale fees (~${(resaleFees / resalePrice * 100).toFixed(0)}%), and maintains 30% ROI target.`,
+        risk_factors: this.identifyRisks(confidenceData),
+        opportunities: this.identifyOpportunities(estimatedROI, confidenceResult.level),
+        warnings: confidenceResult.level !== 'HIGH' ? ['Low confidence. Manual verification recommended.'] : [],
       },
     };
   }
 
-  private calculateOpportunityScore(roi: number, variance: number): number {
-    if (roi < 0.05) return 10;
-    if (roi < 0.15) return 30;
-    if (roi < 0.3) return 60;
-    if (roi < 0.5) return 80;
-    return 100;
+  private calculateVariance(prices: number[]): number {
+    const mean = prices.reduce((a, b) => a + b, 0) / prices.length;
+    const variance =
+      prices.reduce((sum, p) => sum + Math.pow(p - mean, 2), 0) / prices.length;
+    return Math.sqrt(variance);
+  }
+
+  private calculateRiskScore(prices: number[]): number {
+    const variance = this.calculateVariance(prices);
+    const mean = prices.reduce((a, b) => a + b, 0) / prices.length;
+    const cv = variance / mean; // Coefficient of variation
+    return Math.min(100, cv * 100);
+  }
+
+  private identifyRisks(data: { numComps: number; priceVariance: number; medianPrice: number }): string[] {
+    const risks = [];
+    if (data.numComps < 5) risks.push(`Limited comps (${data.numComps})`);
+    if (data.priceVariance / data.medianPrice > 0.25) risks.push('High price variance');
+    return risks;
+  }
+
+  private identifyOpportunities(roi: number, confidence: string): string[] {
+    const opps = [];
+    if (roi > 30) opps.push('Strong margin opportunity.');
+    if (roi > 20) opps.push('Solid profit potential.');
+    if (confidence === 'HIGH') opps.push('High confidence in estimate.');
+    return opps;
   }
 }
 

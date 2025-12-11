@@ -1,77 +1,72 @@
 import axios from 'axios';
 
-interface SemanticScore {
-  similarity: number;
-  reasoning: string;
+interface EmbeddingResponse {
+  data: Array<{ embedding: number[] }>;
 }
 
 export class SemanticMatcher {
-  private apiKey: string;
-  private model = 'text-embedding-3-small';
-  private threshold = 0.78;
+  private openaiKey: string;
   private embeddingCache: Map<string, number[]> = new Map();
 
-  constructor(apiKey: string, threshold?: number) {
-    this.apiKey = apiKey;
-    if (threshold) this.threshold = threshold;
+  constructor(openaiKey: string) {
+    this.openaiKey = openaiKey;
   }
 
-  async scoreComp(
-    sourceListing: { title: string; material?: string; type?: string; condition?: string },
-    compTitle: string
-  ): Promise<SemanticScore> {
+  async getEmbedding(text: string): Promise<number[]> {
+    const normalized = text.toLowerCase().trim();
+    if (this.embeddingCache.has(normalized)) {
+      return this.embeddingCache.get(normalized)!;
+    }
+
     try {
-      const sourceEmbed = await this.embed(
-        `${sourceListing.title} ${sourceListing.material || ''} ${sourceListing.type || ''}`.trim()
+      const response = await axios.post<EmbeddingResponse>(
+        'https://api.openai.com/v1/embeddings',
+        {
+          model: 'text-embedding-3-small',
+          input: text,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${this.openaiKey}`,
+            'Content-Type': 'application/json',
+          },
+        }
       );
-      const compEmbed = await this.embed(compTitle);
 
-      const similarity = this.cosineSimilarity(sourceEmbed, compEmbed);
-
-      return {
-        similarity,
-        reasoning:
-          similarity >= this.threshold
-            ? 'Semantic match'
-            : `Below threshold (${similarity.toFixed(2)} < ${this.threshold})`,
-      };
-    } catch (err) {
-      console.error('Embedding error:', err);
-      return {
-        similarity: 0,
-        reasoning: 'Embedding failed - treating as no match',
-      };
+      const embedding = response.data.data[0].embedding;
+      this.embeddingCache.set(normalized, embedding);
+      return embedding;
+    } catch (error) {
+      console.error('OpenAI embedding error:', error);
+      return Array(1536).fill(0);
     }
   }
 
-  private async embed(text: string): Promise<number[]> {
-    const cached = this.embeddingCache.get(text);
-    if (cached) return cached;
+  cosineSimilarity(vecA: number[], vecB: number[]): number {
+    let dotProduct = 0;
+    let magA = 0;
+    let magB = 0;
 
-    const response = await axios.post(
-      'https://api.openai.com/v1/embeddings',
-      {
-        input: text,
-        model: this.model,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    for (let i = 0; i < vecA.length; i++) {
+      dotProduct += vecA[i] * vecB[i];
+      magA += vecA[i] * vecA[i];
+      magB += vecB[i] * vecB[i];
+    }
 
-    const embedding = response.data.data[0].embedding;
-    this.embeddingCache.set(text, embedding);
-    return embedding;
-  }
-
-  private cosineSimilarity(a: number[], b: number[]): number {
-    const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
-    const magA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
-    const magB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+    magA = Math.sqrt(magA);
+    magB = Math.sqrt(magB);
     return magA && magB ? dotProduct / (magA * magB) : 0;
   }
+
+  async scoreComp(listingTitle: string, compTitle: string): Promise<number> {
+    const [listingEmbed, compEmbed] = await Promise.all([
+      this.getEmbedding(listingTitle),
+      this.getEmbedding(compTitle),
+    ]);
+
+    const similarity = this.cosineSimilarity(listingEmbed, compEmbed);
+    return Math.max(0, Math.min(1, similarity));
+  }
 }
+
 

@@ -1,176 +1,132 @@
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
 
-export interface ScrapedListing {
+export interface ScrapedItem {
   url: string;
   title: string;
-  description: string;
-  source: string;
-  success: boolean;
-  error?: string;
+  description?: string;
+  price?: number;
+  condition?: string;
+  source: 'ebay' | 'facebook' | 'ctbids' | 'shopgoodwill' | 'fallback';
+  timestamp: string;
 }
 
 export class URLScraper {
-  private ax = axios.create({
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-    },
-    timeout: 10000
-  });
-
-  async scrapeCtBids(url: string): Promise<ScrapedListing> {
+  async scrape(url: string): Promise<ScrapedItem | null> {
     try {
-      const { data } = await this.ax.get(url);
-      const dom = new JSDOM(data);
-      const doc = dom.window.document;
+      // Try marketplace-specific scrapers first
+      if (url.includes('ebay.com')) return await this.scrapeEBay(url);
+      if (url.includes('facebook.com')) return await this.scrapeFacebook(url);
+      if (url.includes('ctbids.com')) return await this.scrapeCTBids(url);
+      if (url.includes('shopgoodwill.com')) return await this.scrapeShopGoodwill(url);
       
-      const title = doc.querySelector('h1')?.textContent || '';
-      const description = doc.querySelector('[class*="description"]')?.textContent || 
-                         doc.querySelector('[class*="details"]')?.textContent || '';
-      
-      return {
-        url,
-        title: title.trim(),
-        description: description.trim(),
-        source: 'ctbids',
-        success: !!title
-      };
+      // Fallback to generic title extraction
+      return await this.scrapeGeneric(url);
     } catch (error) {
-      return {
-        url,
-        title: '',
-        description: '',
-        source: 'ctbids',
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      };
+      console.error(`Scrape failed for ${url}:`, error);
+      return null;
     }
   }
 
-  async scrapeEbay(url: string): Promise<ScrapedListing> {
-    try {
-      const { data } = await this.ax.get(url);
-      const dom = new JSDOM(data);
-      const doc = dom.window.document;
-      
-      const title = doc.querySelector('[data-test-id="vi-VR-cvipTitle"]')?.textContent ||
-                   doc.querySelector('h1[class*="it-title"]')?.textContent ||
-                   doc.querySelector('h1')?.textContent || '';
-      
-      const description = doc.querySelector('[class*="ds_div"]')?.textContent ||
-                         doc.querySelector('[id*="viTabs"]')?.textContent || '';
-      
-      return {
-        url,
-        title: title.trim(),
-        description: description.trim().substring(0, 500),
-        source: 'ebay',
-        success: !!title
-      };
-    } catch (error) {
-      return {
-        url,
-        title: '',
-        description: '',
-        source: 'ebay',
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      };
-    }
-  }
+  private async scrapeEBay(url: string): Promise<ScrapedItem> {
+    const response = await axios.get(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+    });
+    const dom = new JSDOM(response.data);
+    const doc = dom.window.document;
 
-  async scrapeMercari(url: string): Promise<ScrapedListing> {
-    try {
-      const { data } = await this.ax.get(url);
-      const dom = new JSDOM(data);
-      const doc = dom.window.document;
-      
-      const title = doc.querySelector('[class*="itemName"]')?.textContent ||
-                   doc.querySelector('h1')?.textContent || '';
-      
-      const description = doc.querySelector('[class*="itemDescription"]')?.textContent ||
-                         doc.querySelector('[class*="description"]')?.textContent || '';
-      
-      return {
-        url,
-        title: title.trim(),
-        description: description.trim().substring(0, 500),
-        source: 'mercari',
-        success: !!title
-      };
-    } catch (error) {
-      return {
-        url,
-        title: '',
-        description: '',
-        source: 'mercari',
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      };
-    }
-  }
+    const title = doc.querySelector('h1.it-title')?.textContent?.trim() ||
+                  doc.querySelector('[data-testid="vi-acc-del-range"] span')?.textContent?.trim() ||
+                  '';
+    const condition = doc.querySelector('.SECONDARY_INFO')?.textContent?.trim() || 'unknown';
 
-  async scrapeFacebook(url: string): Promise<ScrapedListing> {
     return {
       url,
-      title: '',
-      description: '',
-      source: 'facebook',
-      success: false,
-      error: 'Facebook requires authentication. Cannot scrape from this environment.'
+      title: title || 'Unknown Item',
+      condition,
+      source: 'ebay',
+      timestamp: new Date().toISOString(),
     };
   }
 
-  async scrape(url: string): Promise<ScrapedListing> {
-    if (url.includes('ctbids.com')) {
-      return this.scrapeCtBids(url);
-    } else if (url.includes('ebay.com')) {
-      return this.scrapeEbay(url);
-    } else if (url.includes('mercari.com')) {
-      return this.scrapeMercari(url);
-    } else if (url.includes('facebook.com')) {
-      return this.scrapeFacebook(url);
-    } else if (url.includes('shopgoodwill')) {
-      return this.scrapeShopGoodwill(url);
-    }
-    
+  private async scrapeFacebook(url: string): Promise<ScrapedItem> {
+    // Facebook Marketplace blocks scraping; fall back to title extraction
+    return await this.scrapeGeneric(url);
+  }
+
+  private async scrapeCTBids(url: string): Promise<ScrapedItem> {
+    const response = await axios.get(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0' },
+    });
+    const dom = new JSDOM(response.data);
+    const doc = dom.window.document;
+
+    const title = doc.querySelector('h1')?.textContent?.trim() ||
+                  doc.querySelector('.item-title')?.textContent?.trim() ||
+                  '';
+
     return {
       url,
-      title: '',
-      description: '',
-      source: 'unknown',
-      success: false,
-      error: 'Unknown marketplace'
+      title: title || 'Unknown Item',
+      source: 'ctbids',
+      timestamp: new Date().toISOString(),
     };
   }
 
-  private async scrapeShopGoodwill(url: string): Promise<ScrapedListing> {
+  private async scrapeShopGoodwill(url: string): Promise<ScrapedItem> {
+    const response = await axios.get(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0' },
+    });
+    const dom = new JSDOM(response.data);
+    const doc = dom.window.document;
+
+    const title = doc.querySelector('.item-title')?.textContent?.trim() ||
+                  doc.querySelector('h1')?.textContent?.trim() ||
+                  '';
+
+    return {
+      url,
+      title: title || 'Unknown Item',
+      source: 'shopgoodwill',
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  private async scrapeGeneric(url: string): Promise<ScrapedItem> {
     try {
-      const { data } = await this.ax.get(url);
-      const dom = new JSDOM(data);
+      const response = await axios.get(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0' },
+        timeout: 10000,
+      });
+      const dom = new JSDOM(response.data);
       const doc = dom.window.document;
-      
-      const title = doc.querySelector('[class*="itemtitle"]')?.textContent ||
-                   doc.querySelector('h1')?.textContent || '';
-      
-      const description = doc.querySelector('[class*="itemdescription"]')?.textContent ||
-                         doc.querySelector('[class*="description"]')?.textContent || '';
-      
+
+      // Try common title selectors
+      let title = 
+        doc.querySelector('h1')?.textContent?.trim() ||
+        doc.querySelector('title')?.textContent?.trim() ||
+        doc.querySelector('[data-test-id="title"]')?.textContent?.trim() ||
+        'Unknown Item';
+
       return {
         url,
-        title: title.trim(),
-        description: description.trim().substring(0, 500),
-        source: 'shopgoodwill',
-        success: !!title
+        title,
+        source: 'fallback',
+        timestamp: new Date().toISOString(),
       };
-    } catch (error) {
+    } catch {
+      // Extract title from URL as last resort
+      const urlParts = url.split('/');
+      let title = urlParts[urlParts.length - 1]
+        .replace(/[-_]/g, ' ')
+        .replace(/\?.*/, '')
+        .trim();
+
       return {
         url,
-        title: '',
-        description: '',
-        source: 'shopgoodwill',
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        title: title || 'Unknown Item',
+        source: 'fallback',
+        timestamp: new Date().toISOString(),
       };
     }
   }
