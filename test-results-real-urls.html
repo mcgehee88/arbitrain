@@ -1,407 +1,110 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Arbitrain Phase 2 - Real URL Test Results</title>
+  <title>Arbitrain Phase 2 Test Results</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f5f5f5;
-      padding: 40px 20px;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 40px;
-      text-align: center;
-    }
-    header h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
-    header p {
-      opacity: 0.9;
-    }
-    .content {
-      padding: 40px;
-    }
-    .test-case {
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      padding: 20px;
-      margin-bottom: 30px;
-    }
-    .test-case h3 {
-      color: #333;
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #667eea;
-    }
-    .section {
-      margin: 20px 0;
-      padding: 15px;
-      background: #f9f9f9;
-      border-radius: 4px;
-    }
-    .section h4 {
-      color: #667eea;
-      margin-bottom: 10px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    table td, table th {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    table th {
-      background: #f0f0f0;
-      font-weight: 600;
-    }
-    .result-section {
-      background: #f0f7ff;
-      border-left: 4px solid #667eea;
-    }
-    .result-metrics {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
-    }
-    .metric {
-      background: white;
-      padding: 15px;
-      border-radius: 4px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-    .metric label {
-      font-size: 0.85em;
-      color: #666;
-      display: block;
-      margin-bottom: 5px;
-    }
-    .metric .value {
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #333;
-    }
-    .metric .value.high {
-      color: #28a745;
-    }
-    .metric .value.medium {
-      color: #ffc107;
-    }
-    .metric .value.low {
-      color: #dc3545;
-    }
-    a {
-      color: #667eea;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    ol, ul {
-      margin: 10px 0 10px 20px;
-    }
+    body { font-family: system-ui; margin: 2rem; background: #f5f5f5; }
+    h1 { color: #333; }
+    .test-case { background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    td { padding: 0.75rem; border-bottom: 1px solid #eee; }
+    td:first-child { font-weight: bold; width: 25%; }
+    a { color: #0066cc; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🚀 Arbitrain Phase 2 Test Suite</h1>
-      <p>Real URL → Scrape → Profile → Query Ladder → eBay Comps → Analysis</p>
-    </header>
-    <div class="content">
-      
+  <header>
+    <h1>🚀 Arbitrain Phase 2 - Production Test Results</h1>
+    <p>Full end-to-end pipeline: URL → Scrape → Profile → eBay Comps → Analysis</p>
+  </header>
+  <div class="content">
     <div class="test-case">
-      <h3>Test 1: EBAY</h3>
-      <p><strong>URL:</strong> <a href="https://www.ebay.com/itm/185810487116" target="_blank">https://www.ebay.com/itm/185810487116...</a></p>
-
-      <div class="section">
-        <h4>📋 Scraped Listing</h4>
-        
-          <p><strong>Title:</strong> Vintage Estate 14K Yellow Gold and Diamond Masonic Shriner Ring *see appraisal*</p>
-          <p><strong>Description:</strong> Item specificsConditionPre-owned - Good: This item has been gently used but is in good condition. It might have a few signs ... Read moreabout the conditionPre-owned - Good: This item has been gently used but is in good condition. It might have a few signs of wear, like light scratches or tarnishing...</p>
-        
-      </div>
-
-      <div class="section">
-        <h4>🔍 Item Profile</h4>
-        
-          <table>
-            <tr><td>Type</td><td>jewelry</td></tr>
-            <tr><td>Condition</td><td>good</td></tr>
-            <tr><td>Category</td><td>Jewelry & Watches</td></tr>
-            <tr><td>Brand</td><td>N/A</td></tr>
-            <tr><td>Is Lot?</td><td>No</td></tr>
-            <tr><td>Extraction Confidence</td><td>85%</td></tr>
-          </table>
-        
-      </div>
-
-      <div class="section">
-        <h4>🔎 Search Queries</h4>
-        
-          <p>Query Ladder (5 queries):</p>
-          <ol>
-            <li>14k 14k masonic</li><li>14k 14k</li><li>14k gemstone</li><li>14k jewelry</li><li>jewelry</li>
-          </ol>
-        
-      </div>
-
-      <div class="section">
-        <h4>💰 eBay Sold Comps (Last 30 Days)</h4>
-        
-          <p>Found <strong>25 comps</strong></p>
-          <table>
-            <tr>
-              <th>Price</th>
-              <th>Condition</th>
-              <th>Sold Date</th>
-              <th>Title</th>
-            </tr>
-            
-              <tr>
-                <td>$54.00</td>
-                <td>Pre-owned - Good</td>
-                <td>12/11/2025</td>
-                <td>14k Gold Mason  SUN IN SPLENDER pin W/diamond...</td>
-              </tr>
-            
-              <tr>
-                <td>$950.00</td>
-                <td>Used</td>
-                <td>12/11/2025</td>
-                <td>Masonic Knights Templar IN HOC SIGNO VINCES 14K So...</td>
-              </tr>
-            
-              <tr>
-                <td>$2499.00</td>
-                <td>Pre-owned - Good</td>
-                <td>12/11/2025</td>
-                <td>Vintage Masonic Orb Gold Pendant 14k Silver Conver...</td>
-              </tr>
-            
-              <tr>
-                <td>$1500.00</td>
-                <td>Used</td>
-                <td>12/11/2025</td>
-                <td>14k Gold 0.50 CTW Diamond 32nd Degree Masonic Ring...</td>
-              </tr>
-            
-              <tr>
-                <td>$499.95</td>
-                <td>Used</td>
-                <td>12/11/2025</td>
-                <td>14k Antique Gold & Enamel Masonic Watch fob or Pen...</td>
-              </tr>
-            
-          </table>
-          <p style="font-size: 0.9em; color: #666;">Showing first 5 of 25 comps</p>
-        
-      </div>
-
-      
-      <div class="section result-section">
-        <h4>🎯 Arbitrain Analysis</h4>
-        
-        <div class="result-metrics">
-          <div class="metric">
-            <label>Median Price</label>
-            <div class="value">$522.49</div>
-          </div>
-          <div class="metric">
-            <label>Price Range</label>
-            <div class="value" style="font-size: 0.9em;">
-              $22<br>–<br>$2500
-            </div>
-          </div>
-          <div class="metric">
-            <label>Max Safe Bid</label>
-            <div class="value">$285.62</div>
-          </div>
-          <div class="metric">
-            <label>Confidence</label>
-            <div class="value high">
-              HIGH<br><span style="font-size: 0.7em;">80/100</span>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top: 20px;">
-          <p><strong>📊 Summary:</strong> Expected resale: $522.49. Max safe bid: $285.62. 25 quality comps. Confidence: HIGH.</p>
-          <p><strong>💡 Reasoning:</strong> Median sold price from 25 comparable 14k Jewelry & Watches items is $522.49.</p>
-          <p><strong>📈 Max Bid Logic:</strong> Max bid accounts for buyer premium (12%), shipping ($8), resale fees (~13.25%), and maintains 30% ROI target.</p>
-        </div>
-
-        
-
-        
-          <div style="background: #d4edda; border-left: 4px solid #28a745; padding: 15px; margin-top: 15px; border-radius: 4px;">
-            <strong style="color: #155724;">✅ Opportunities:</strong>
-            <ul style="margin: 10px 0 0 20px;">
-              <li style="color: #155724;">Excellent arbitrage opportunity - strong profit margin.</li><li style="color: #155724;">Strong market liquidity - easy to resell.</li><li style="color: #155724;">Listing price significantly below market comps - potential bargain.</li>
-            </ul>
-          </div>
-        
-      </div>
-    
+      <h3>Test 1: ERROR</h3>
+      <table>
+        <tr><td>URL</td><td><a href="https://www.ebay.com/itm/185810487116" target="_blank">https://www.ebay.com/itm/185810487116</a></td></tr>
+        <tr><td>Source</td><td>eBay</td></tr>
+        <tr><td>Item Type</td><td>N/A</td></tr>
+        <tr><td>Condition</td><td>N/A</td></tr>
+        <tr><td>Comps Found</td><td>0</td></tr>
+        <tr><td>Expected Resale</td><td>$N/A</td></tr>
+        <tr><td>Max Safe Bid</td><td>$N/A</td></tr>
+        <tr><td>Estimated Profit</td><td>$N/A</td></tr>
+        <tr><td>ROI</td><td>N/A%</td></tr>
+        <tr><td>Confidence</td><td>N/A/100</td></tr>
+        <tr><td>Summary</td><td>this.taxonomyMatcher.scoreMatch is not a function</td></tr>
+      </table>
     </div>
   
+
     <div class="test-case">
-      <h3>Test 2: FAILED</h3>
-      <p><strong>URL:</strong> <a href="https://ctbids.com/estate-sale/40139/item/4678063/White-Clad-Vintage-Oak-Ice-Box" target="_blank">https://ctbids.com/estate-sale/40139/item/4678063/White-Clad-Vintage-Oak-Ice-Box...</a></p>
-
-      <div class="section">
-        <h4>📋 Scraped Listing</h4>
-        <p style="color: red;"><strong>Error:</strong> Failed to scrape listing</p>
-      </div>
-
-      <div class="section">
-        <h4>🔍 Item Profile</h4>
-        <p style="color: orange;">Skipped (failed to scrape)</p>
-      </div>
-
-      <div class="section">
-        <h4>🔎 Search Queries</h4>
-        <p style="color: orange;">Skipped (no profile)</p>
-      </div>
-
-      <div class="section">
-        <h4>💰 eBay Sold Comps (Last 30 Days)</h4>
-        <p style="color: orange;"><strong>⚠️ No comps found</strong></p>
-      </div>
-
-      
-      <div class="section result-section">
-        <h4>🎯 Analysis Result</h4>
-        <div style="background: #f8d7da; padding: 10px; color: #721c24;">
-          <strong>❌ Analysis Failed:</strong> Failed to scrape listing
-        </div>
-      </div>
-    
+      <h3>Test 2: SCRAPE FAILED</h3>
+      <table>
+        <tr><td>URL</td><td><a href="https://www.ebay.com/itm/404819005678" target="_blank">https://www.ebay.com/itm/404819005678</a></td></tr>
+        <tr><td>Source</td><td>eBay</td></tr>
+        <tr><td>Item Type</td><td>N/A</td></tr>
+        <tr><td>Condition</td><td>N/A</td></tr>
+        <tr><td>Comps Found</td><td>0</td></tr>
+        <tr><td>Expected Resale</td><td>$N/A</td></tr>
+        <tr><td>Max Safe Bid</td><td>$N/A</td></tr>
+        <tr><td>Estimated Profit</td><td>$N/A</td></tr>
+        <tr><td>ROI</td><td>N/A%</td></tr>
+        <tr><td>Confidence</td><td>N/A/100</td></tr>
+        <tr><td>Summary</td><td>URL scraping failed</td></tr>
+      </table>
     </div>
   
+
     <div class="test-case">
-      <h3>Test 3: FAILED</h3>
-      <p><strong>URL:</strong> <a href="https://ctbids.com/estate-sale/40607/item/4676938/14k-Gold-Heart-Earrings-And-14k-AK-Turkey-Byzantine-Band-Ring" target="_blank">https://ctbids.com/estate-sale/40607/item/4676938/14k-Gold-Heart-Earrings-And-14k-AK-Turkey-Byzantin...</a></p>
-
-      <div class="section">
-        <h4>📋 Scraped Listing</h4>
-        <p style="color: red;"><strong>Error:</strong> Failed to scrape listing</p>
-      </div>
-
-      <div class="section">
-        <h4>🔍 Item Profile</h4>
-        <p style="color: orange;">Skipped (failed to scrape)</p>
-      </div>
-
-      <div class="section">
-        <h4>🔎 Search Queries</h4>
-        <p style="color: orange;">Skipped (no profile)</p>
-      </div>
-
-      <div class="section">
-        <h4>💰 eBay Sold Comps (Last 30 Days)</h4>
-        <p style="color: orange;"><strong>⚠️ No comps found</strong></p>
-      </div>
-
-      
-      <div class="section result-section">
-        <h4>🎯 Analysis Result</h4>
-        <div style="background: #f8d7da; padding: 10px; color: #721c24;">
-          <strong>❌ Analysis Failed:</strong> Failed to scrape listing
-        </div>
-      </div>
-    
+      <h3>Test 3: SCRAPE FAILED</h3>
+      <table>
+        <tr><td>URL</td><td><a href="https://www.ebay.com/itm/255789012345" target="_blank">https://www.ebay.com/itm/255789012345</a></td></tr>
+        <tr><td>Source</td><td>eBay</td></tr>
+        <tr><td>Item Type</td><td>N/A</td></tr>
+        <tr><td>Condition</td><td>N/A</td></tr>
+        <tr><td>Comps Found</td><td>0</td></tr>
+        <tr><td>Expected Resale</td><td>$N/A</td></tr>
+        <tr><td>Max Safe Bid</td><td>$N/A</td></tr>
+        <tr><td>Estimated Profit</td><td>$N/A</td></tr>
+        <tr><td>ROI</td><td>N/A%</td></tr>
+        <tr><td>Confidence</td><td>N/A/100</td></tr>
+        <tr><td>Summary</td><td>URL scraping failed</td></tr>
+      </table>
     </div>
   
+
     <div class="test-case">
-      <h3>Test 4: FAILED</h3>
-      <p><strong>URL:</strong> <a href="https://www.mercari.com/us/item/m98929635815/" target="_blank">https://www.mercari.com/us/item/m98929635815/...</a></p>
-
-      <div class="section">
-        <h4>📋 Scraped Listing</h4>
-        <p style="color: red;"><strong>Error:</strong> Request failed with status code 403</p>
-      </div>
-
-      <div class="section">
-        <h4>🔍 Item Profile</h4>
-        <p style="color: orange;">Skipped (failed to scrape)</p>
-      </div>
-
-      <div class="section">
-        <h4>🔎 Search Queries</h4>
-        <p style="color: orange;">Skipped (no profile)</p>
-      </div>
-
-      <div class="section">
-        <h4>💰 eBay Sold Comps (Last 30 Days)</h4>
-        <p style="color: orange;"><strong>⚠️ No comps found</strong></p>
-      </div>
-
-      
-      <div class="section result-section">
-        <h4>🎯 Analysis Result</h4>
-        <div style="background: #f8d7da; padding: 10px; color: #721c24;">
-          <strong>❌ Analysis Failed:</strong> Request failed with status code 403
-        </div>
-      </div>
-    
+      <h3>Test 4: ERROR</h3>
+      <table>
+        <tr><td>URL</td><td><a href="https://www.ebay.com/itm/227127658737" target="_blank">https://www.ebay.com/itm/227127658737</a></td></tr>
+        <tr><td>Source</td><td>eBay</td></tr>
+        <tr><td>Item Type</td><td>N/A</td></tr>
+        <tr><td>Condition</td><td>N/A</td></tr>
+        <tr><td>Comps Found</td><td>0</td></tr>
+        <tr><td>Expected Resale</td><td>$N/A</td></tr>
+        <tr><td>Max Safe Bid</td><td>$N/A</td></tr>
+        <tr><td>Estimated Profit</td><td>$N/A</td></tr>
+        <tr><td>ROI</td><td>N/A%</td></tr>
+        <tr><td>Confidence</td><td>N/A/100</td></tr>
+        <tr><td>Summary</td><td>this.taxonomyMatcher.scoreMatch is not a function</td></tr>
+      </table>
     </div>
   
+
     <div class="test-case">
-      <h3>Test 5: FAILED</h3>
-      <p><strong>URL:</strong> <a href="https://www.ebay.com/itm/275814509162" target="_blank">https://www.ebay.com/itm/275814509162...</a></p>
-
-      <div class="section">
-        <h4>📋 Scraped Listing</h4>
-        <p style="color: red;"><strong>Error:</strong> Request failed with status code 404</p>
-      </div>
-
-      <div class="section">
-        <h4>🔍 Item Profile</h4>
-        <p style="color: orange;">Skipped (failed to scrape)</p>
-      </div>
-
-      <div class="section">
-        <h4>🔎 Search Queries</h4>
-        <p style="color: orange;">Skipped (no profile)</p>
-      </div>
-
-      <div class="section">
-        <h4>💰 eBay Sold Comps (Last 30 Days)</h4>
-        <p style="color: orange;"><strong>⚠️ No comps found</strong></p>
-      </div>
-
-      
-      <div class="section result-section">
-        <h4>🎯 Analysis Result</h4>
-        <div style="background: #f8d7da; padding: 10px; color: #721c24;">
-          <strong>❌ Analysis Failed:</strong> Request failed with status code 404
-        </div>
-      </div>
-    
-    </div>
-  
+      <h3>Test 5: SCRAPE FAILED</h3>
+      <table>
+        <tr><td>URL</td><td><a href="https://www.ebay.com/itm/266555555555" target="_blank">https://www.ebay.com/itm/266555555555</a></td></tr>
+        <tr><td>Source</td><td>eBay</td></tr>
+        <tr><td>Item Type</td><td>N/A</td></tr>
+        <tr><td>Condition</td><td>N/A</td></tr>
+        <tr><td>Comps Found</td><td>0</td></tr>
+        <tr><td>Expected Resale</td><td>$N/A</td></tr>
+        <tr><td>Max Safe Bid</td><td>$N/A</td></tr>
+        <tr><td>Estimated Profit</td><td>$N/A</td></tr>
+        <tr><td>ROI</td><td>N/A%</td></tr>
+        <tr><td>Confidence</td><td>N/A/100</td></tr>
+        <tr><td>Summary</td><td>URL scraping failed</td></tr>
+      </table>
     </div>
   </div>
 </body>
