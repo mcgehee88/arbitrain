@@ -292,11 +292,11 @@
         </div>
         
         <div class="input-section">
-          <label class="input-label">Paste any listing URL</label>
+          <label class="input-label">Paste any marketplace listing URL</label>
           <div class="input-row">
             <div class="input-wrapper">
               <div class="input-icon">${icons.search}</div>
-              <input type="text" class="input-field" placeholder="https://ctbids.com/..." value="${state.url}" oninput="state.url=this.value">
+              <input type="text" class="input-field" placeholder="https://ebay.com/..." value="${state.url}" oninput="state.url=this.value">
             </div>
             <button class="btn-primary" onclick="analyze(state.url)" ${state.loading ? 'disabled' : ''}>
               ${state.loading ? '<div class="spinner"></div>Analyzing...' : `${icons.target}Analyze`}
